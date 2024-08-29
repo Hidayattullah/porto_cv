@@ -1,6 +1,9 @@
+// lib/widgets/navigation/desktop_sec.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/navigation_cubit.dart';
+import 'navigation_header.dart'; // Import NavigationHeader
+import 'navigation_footer.dart'; // Import NavigationFooter
 
 class DesktopSec extends StatelessWidget {
   const DesktopSec({super.key});
@@ -13,28 +16,23 @@ class DesktopSec extends StatelessWidget {
           width: 500, // Ukuran untuk navigasi di desktop
           color: Colors.grey[200], // Warna latar belakang untuk navigasi
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Mengatur main axis untuk menempatkan footer di bawah
             children: [
-              // Drawer header dengan tinggi tetap
-              Container(
-                height: 250, // Tinggi header
-                color: Colors.blue, // Warna latar belakang header
-                child: const Center(
-                  child: Text(
-                    'Navigation',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              const NavigationHeader(), // Menggunakan widget NavigationHeader
+
+              Expanded( // Membuat list tile menggunakan sisa ruang
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildNavItem(context, 'Home', NavigationState.homesec, state == NavigationState.homesec),
+                    _buildNavItem(context, 'Experience', NavigationState.experiencesec, state == NavigationState.experiencesec),
+                    _buildNavItem(context, 'Projects', NavigationState.projectsec, state == NavigationState.projectsec),
+                    _buildNavItem(context, 'Contact', NavigationState.contactsec, state == NavigationState.contactsec),
+                  ],
                 ),
               ),
-              // Item navigasi
-              _buildNavItem(context, 'Home', 0, state == NavigationState.homesec),
-              _buildNavItem(context, 'About Us', 1, state == NavigationState.aboutsec),
-              _buildNavItem(context, 'Projects', 2, state == NavigationState.projectsec),
-              _buildNavItem(context, 'Contact', 3, state == NavigationState.contactsec),
+
+              const NavigationFooter(), // Menggunakan widget NavigationFooter
             ],
           ),
         );
@@ -42,7 +40,7 @@ class DesktopSec extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, String title, int index, bool isSelected) {
+  Widget _buildNavItem(BuildContext context, String title, NavigationState sectionState, bool isSelected) {
     return ListTile(
       title: Text(
         title,
@@ -51,19 +49,20 @@ class DesktopSec extends StatelessWidget {
       selected: isSelected,
       selectedTileColor: Colors.blue[100], // Warna latar belakang ketika dipilih
       onTap: () {
-        // Menggunakan metode navigasi dari NavigationCubit berdasarkan index
-        switch (index) {
-          case 0:
-            BlocProvider.of<NavigationCubit>(context).navigateToshowHomeSec();
+        // Menggunakan metode navigasi dari NavigationCubit berdasarkan sectionState
+        final navigationCubit = BlocProvider.of<NavigationCubit>(context);
+        switch (sectionState) {
+          case NavigationState.homesec:
+            navigationCubit.navigateToshowHomeSec();
             break;
-          case 1:
-            BlocProvider.of<NavigationCubit>(context).navigateToshowAboutSec();
+          case NavigationState.experiencesec:
+            navigationCubit.navigateToshowExperienceSec();
             break;
-          case 2:
-            BlocProvider.of<NavigationCubit>(context).navigateToshowProjectSec();
+          case NavigationState.projectsec:
+            navigationCubit.navigateToshowProjectSec();
             break;
-          case 3:
-            BlocProvider.of<NavigationCubit>(context).navigateToshowContactSec();
+          case NavigationState.contactsec:
+            navigationCubit.navigateToshowContactSec();
             break;
         }
       },

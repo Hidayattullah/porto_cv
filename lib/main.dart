@@ -14,9 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => NavigationCubit()), // Initialize SecnavCubit
-   // Initialize ThemeCubit
-        // Add other providers if needed
+        BlocProvider(create: (context) => NavigationCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -24,7 +22,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const LandingPage(), // Use LandingPage as the home
+        home: const LandingPage(),
       ),
     );
   }

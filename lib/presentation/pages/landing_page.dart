@@ -4,7 +4,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../cubits/navigation_cubit.dart';
 import '../widgets/navigation/desktop_sec.dart';
 import '../widgets/navigation/mobile_sec.dart';
-import 'content/about_sec.dart';
+import 'content/experience_sec.dart';
 import 'content/contact_sec.dart';
 import 'content/home_sec.dart';
 import 'content/project_sec.dart';
@@ -19,6 +19,9 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+
+  // Variabel untuk menyimpan state saat ini
+  NavigationState _currentNavigationState = NavigationState.homesec;
 
   @override
   void initState() {
@@ -35,16 +38,28 @@ class _LandingPageState extends State<LandingPage> {
           // Menggunakan NavigationCubit untuk navigasi berdasarkan scroll
           switch (firstVisibleItemIndex) {
             case 0:
-              BlocProvider.of<NavigationCubit>(context).navigateToshowHomeSec();
+              if (_currentNavigationState != NavigationState.homesec) {
+                _currentNavigationState = NavigationState.homesec;
+                BlocProvider.of<NavigationCubit>(context).navigateToshowHomeSec();
+              }
               break;
             case 1:
-              BlocProvider.of<NavigationCubit>(context).navigateToshowAboutSec();
+              if (_currentNavigationState != NavigationState.experiencesec) {
+                _currentNavigationState = NavigationState.experiencesec;
+                BlocProvider.of<NavigationCubit>(context).navigateToshowExperienceSec();
+              }
               break;
             case 2:
-              BlocProvider.of<NavigationCubit>(context).navigateToshowProjectSec();
+              if (_currentNavigationState != NavigationState.projectsec) {
+                _currentNavigationState = NavigationState.projectsec;
+                BlocProvider.of<NavigationCubit>(context).navigateToshowProjectSec();
+              }
               break;
             case 3:
-              BlocProvider.of<NavigationCubit>(context).navigateToshowContactSec();
+              if (_currentNavigationState != NavigationState.contactsec) {
+                _currentNavigationState = NavigationState.contactsec;
+                BlocProvider.of<NavigationCubit>(context).navigateToshowContactSec();
+              }
               break;
           }
         }
@@ -56,14 +71,27 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     final isDesktopMode = MediaQuery.of(context).size.width >= 1024;
     return Scaffold(
-      body: isDesktopMode
-          ? Row(
-              children: [
-                const DesktopSec(), // Side navigation untuk desktop
-                Expanded(child: _buildScrollableContent()),
-              ],
-            )
-          : const MobileSec(), // SliverPersistentHeader untuk mobile dan tablet
+      body: BlocListener<NavigationCubit, NavigationState>(
+        listener: (context, state) {
+          if (_currentNavigationState != state) {
+            _currentNavigationState = state;
+            final index = state.index;
+            itemScrollController.scrollTo(
+              index: index,
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.easeInOut,
+            );
+          }
+        },
+        child: isDesktopMode
+            ? Row(
+                children: [
+                  const DesktopSec(), // Side navigation untuk desktop
+                  Expanded(child: _buildScrollableContent()),
+                ],
+              )
+            : const MobileSec(), // SliverPersistentHeader untuk mobile dan tablet
+      ),
     );
   }
 
@@ -86,7 +114,7 @@ class _LandingPageState extends State<LandingPage> {
       case 0:
         return const HomeSec();
       case 1:
-        return const AboutSec();
+        return const ExperienceSec();
       case 2:
         return const ProjectSec();
       case 3:
@@ -102,7 +130,7 @@ extension NavigationStateExtension on NavigationState {
     switch (this) {
       case NavigationState.homesec:
         return 0;
-      case NavigationState.aboutsec:
+      case NavigationState.experiencesec:
         return 1;
       case NavigationState.projectsec:
         return 2;

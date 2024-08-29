@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import '../../pages/content/about_sec.dart';
+import '../../pages/content/experience_sec.dart';
 import '../../pages/content/home_sec.dart';
 import '../../pages/content/project_sec.dart';
 import '../../pages/content/contact_sec.dart';
@@ -35,11 +35,11 @@ class MobileSec extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             alignment: Alignment.centerLeft,
             child: const Text(
-              'About',
+              'Experience',
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
           ),
-          sliver: const SliverToBoxAdapter(child: AboutSec()),
+          sliver: const SliverToBoxAdapter(child: ExperienceSec()),
         ),
 
         // Sticky Header untuk Projects
