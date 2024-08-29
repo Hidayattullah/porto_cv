@@ -1,14 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Menggunakan int untuk state navigasi (0: Home, 1: About, 2: Projects, 3: Contact)
-class NavigationCubit extends Cubit<int> {
-  NavigationCubit() : super(0); // Mulai dari halaman Home (index 0)
+enum NavigationState { homesec, aboutsec, projectsec, contactsec }
 
-  void navigateToSection(int index) => emit(index);
+class NavigationCubit extends Cubit<NavigationState> {
+  NavigationCubit() : super(NavigationState.homesec);
 
   // Metode-metode ini bisa digunakan di tempat yang diperlukan
-  void showHomePage() => emit(0);
-  void showAboutusPage() => emit(1);
-  void showProjectPage() => emit(2);
-  void showContactPage() => emit(3);
+  void navigateToshowHomeSec() => emit(NavigationState.homesec);
+  void navigateToshowAboutSec() => emit(NavigationState.aboutsec);
+  void navigateToshowProjectSec() => emit(NavigationState.projectsec);
+  void navigateToshowContactSec() => emit(NavigationState.contactsec);
 }

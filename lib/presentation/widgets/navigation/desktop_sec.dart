@@ -7,18 +7,34 @@ class DesktopSec extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationCubit, int>( // Menggunakan NavigationCubit dan int sebagai state
+    return BlocBuilder<NavigationCubit, NavigationState>(
       builder: (context, state) {
         return Container(
-          width: 200, // Ukuran untuk navigasi di desktop
+          width: 500, // Ukuran untuk navigasi di desktop
           color: Colors.grey[200], // Warna latar belakang untuk navigasi
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _buildNavItem(context, 'Home', 0, state == 0),
-              _buildNavItem(context, 'About Us', 1, state == 1),
-              _buildNavItem(context, 'Projects', 2, state == 2),
-              _buildNavItem(context, 'Contact', 3, state == 3),
+              // Drawer header dengan tinggi tetap
+              Container(
+                height: 250, // Tinggi header
+                color: Colors.blue, // Warna latar belakang header
+                child: const Center(
+                  child: Text(
+                    'Navigation',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              // Item navigasi
+              _buildNavItem(context, 'Home', 0, state == NavigationState.homesec),
+              _buildNavItem(context, 'About Us', 1, state == NavigationState.aboutsec),
+              _buildNavItem(context, 'Projects', 2, state == NavigationState.projectsec),
+              _buildNavItem(context, 'Contact', 3, state == NavigationState.contactsec),
             ],
           ),
         );
@@ -33,9 +49,23 @@ class DesktopSec extends StatelessWidget {
         style: TextStyle(color: isSelected ? Colors.blue : Colors.black),
       ),
       selected: isSelected,
+      selectedTileColor: Colors.blue[100], // Warna latar belakang ketika dipilih
       onTap: () {
-        // Menggunakan metode navigateToSection dari NavigationCubit
-        BlocProvider.of<NavigationCubit>(context).navigateToSection(index);
+        // Menggunakan metode navigasi dari NavigationCubit berdasarkan index
+        switch (index) {
+          case 0:
+            BlocProvider.of<NavigationCubit>(context).navigateToshowHomeSec();
+            break;
+          case 1:
+            BlocProvider.of<NavigationCubit>(context).navigateToshowAboutSec();
+            break;
+          case 2:
+            BlocProvider.of<NavigationCubit>(context).navigateToshowProjectSec();
+            break;
+          case 3:
+            BlocProvider.of<NavigationCubit>(context).navigateToshowContactSec();
+            break;
+        }
       },
     );
   }
