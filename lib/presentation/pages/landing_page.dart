@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../cubits/navigation_cubit.dart';
+import '../cubits/navigation/navigation_cubit.dart';
 import '../widgets/navigation/desktop_sec.dart';
 import '../widgets/navigation/mobile_sec.dart';
 import 'content/experience_sec.dart';

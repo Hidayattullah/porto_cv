@@ -10,68 +10,77 @@ class MobileSec extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        // Sticky Header untuk Home
-        SliverStickyHeader(
-          header: Container(
-            height: 60.0,
-            color: Colors.blue,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              'Home',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          // Sticky Header untuk Home
+          SliverStickyHeader(
+            header: Container(
+              height: 60.0,
+              color: Colors.blue,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Home',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
+            sliver: const SliverToBoxAdapter(child: HomeSec()),
           ),
-          sliver: const SliverToBoxAdapter(child: HomeSec()),
-        ),
 
-        // Sticky Header untuk About
-        SliverStickyHeader(
-          header: Container(
-            height: 60.0,
-            color: Colors.green,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              'Experience',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+          // Sticky Header untuk Experience
+          SliverStickyHeader(
+            header: Container(
+              height: 60.0,
+              color: Colors.green,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Experience',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
+            sliver: const SliverToBoxAdapter(child: ExperienceSec()),
           ),
-          sliver: const SliverToBoxAdapter(child: ExperienceSec()),
-        ),
 
-        // Sticky Header untuk Projects
-        SliverStickyHeader(
-          header: Container(
-            height: 60.0,
-            color: Colors.red,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              'Projects',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+          // Sticky Header untuk Projects
+          SliverStickyHeader(
+            header: Container(
+              height: 60.0,
+              color: Colors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Projects',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
+            sliver: const SliverToBoxAdapter(child: ProjectSec()),
           ),
-          sliver: const SliverToBoxAdapter(child: ProjectSec()),
-        ),
 
-        // Sticky Header untuk Contact
-        SliverStickyHeader(
-          header: Container(
-            height: 60.0,
-            color: Colors.purple,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            alignment: Alignment.centerLeft,
-            child: const Text(
-              'Contact',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+          // Sticky Header untuk Contact
+          SliverStickyHeader(
+            header: Container(
+              height: 60.0,
+              color: Colors.purple,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Contact',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
+            sliver: const SliverToBoxAdapter(child: ContactSec()),
           ),
-          sliver: const SliverToBoxAdapter(child: ContactSec()),
-        ),
-      ],
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigasi ke halaman login
+          Navigator.pushNamed(context, '/login');
+        },
+        child: const Icon(Icons.login),
+      ),
     );
   }
 }
