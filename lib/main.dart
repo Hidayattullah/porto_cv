@@ -1,43 +1,61 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core
+import 'package:porto_cv/firebase_options.dart';
 import 'presentation/cubits/auth/auth_cubit.dart';
-import 'presentation/cubits/navigation/navigation_cubit.dart';
+import 'presentation/cubits/navigation/navigation_cubit.dart'; // Import NavigationCubit
+import 'data/repositories/auth_repository.dart';
 import 'presentation/pages/auth/login.dart';
 import 'presentation/pages/landing_page.dart';
-import 'firebase_options.dart'; // Import file konfigurasi Firebase
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Inisialisasi Firebase
+  if (kDebugMode) {
+    print('Memulai inisialisasi Firebase...');
+  }
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform, // Menggunakan opsi konfigurasi platform yang sesuai
-  );
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Inisialisasi Firebase
+  if (kDebugMode) {
+    print('Firebase berhasil diinisialisasi.');
+  }
 
-  runApp(const MyApp());
+  final authRepository = AuthRepository(); // Inisialisasi AuthRepository
+
+  runApp(
+    MyApp(authRepository: authRepository),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthRepository authRepository;
+
+  const MyApp({required this.authRepository, super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => NavigationCubit()),
-        BlocProvider(create: (context) => AuthCubit()), // Menambahkan AuthCubit
+        BlocProvider<AuthCubit>(
+          create: (context) => AuthCubit(authRepository),
+        ),
+        BlocProvider<NavigationCubit>(
+          create: (context) => NavigationCubit(), // Inisialisasi NavigationCubit
+        ),
+        // Tambahkan cubit atau provider lainnya di sini
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Portfolio Website',
+        title: 'Portfolio App',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: '/',
+        home: const LandingPage(), // Halaman utama setelah login berhasil
         routes: {
-          '/': (context) => const LandingPage(),
-          '/login': (context) => const LoginPage(),
+          '/login': (context) => const LoginPage(), // Definisikan route untuk halaman login
+          '/landing': (context) => const LandingPage(), // Rute ke landing_page
+          // Tambahkan route lain jika diperlukan
         },
       ),
     );

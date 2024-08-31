@@ -23,6 +23,16 @@ class DesktopSec extends StatelessWidget {
                 children: [
                   const NavigationHeader(), // Menggunakan widget NavigationHeader
                   
+                  // Menampilkan email jika pengguna telah login
+                  if (authState is AuthAuthenticated) 
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Logged in as: ${authState.email}', // Menampilkan email pengguna
+                        style: const TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                    ),
+                  
                   // Membungkus list tile dengan SingleChildScrollView
                   Expanded(
                     child: SingleChildScrollView(

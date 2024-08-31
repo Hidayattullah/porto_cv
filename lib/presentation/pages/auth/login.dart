@@ -1,4 +1,3 @@
-// lib/presentation/pages/login.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/auth/auth_cubit.dart';
@@ -19,8 +18,8 @@ class LoginPage extends StatelessWidget {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            // Jika login berhasil, navigasi ke halaman dashboard
-            Navigator.pushReplacementNamed(context, '/dashboard');
+            // Jika login berhasil, navigasi ke halaman landing_page
+            Navigator.pushReplacementNamed(context, '/landing');
           } else if (state is AuthError) {
             // Jika ada error, tampilkan pesan error
             ScaffoldMessenger.of(context).showSnackBar(
