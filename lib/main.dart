@@ -1,13 +1,17 @@
+// File: main.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:porto_cv/firebase_options.dart';
-import 'presentation/cubits/auth/auth_cubit.dart';
 import 'presentation/cubits/navigation/navigation_cubit.dart'; // Import NavigationCubit
-import 'data/repositories/auth_repository.dart';
 import 'presentation/pages/auth/login.dart';
 import 'presentation/pages/landing_page.dart';
+import 'presentation/pages/project/project_list_page.dart';
+
+//dependencies module
+import 'dependencies/auth_dependency.dart';
+import 'dependencies/project_dependency.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,25 +25,18 @@ void main() async {
     print('Firebase berhasil diinisialisasi.');
   }
 
-  final authRepository = AuthRepository(); // Inisialisasi AuthRepository
-
-  runApp(
-    MyApp(authRepository: authRepository),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final AuthRepository authRepository;
-
-  const MyApp({required this.authRepository, super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(
-          create: (context) => AuthCubit(authRepository),
-        ),
+        ...provideAuthDependencies(), // Menggunakan Auth Dependencies
+        ...provideProjectDependencies(), // Menggunakan Project Dependencies
         BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(), // Inisialisasi NavigationCubit
         ),
@@ -55,6 +52,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (context) => const LoginPage(), // Definisikan route untuk halaman login
           '/landing': (context) => const LandingPage(), // Rute ke landing_page
+          '/projects': (context) => const ProjectListPage(), // Rute ke project_list_page
           // Tambahkan route lain jika diperlukan
         },
       ),
