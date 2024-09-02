@@ -14,48 +14,39 @@ class ProjectListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(project.title),
-        subtitle: Text(project.description),
-        trailing: BlocBuilder<AuthCubit, AuthState>(
-          builder: (context, authState) {
-            if (authState is AuthAuthenticated) {
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ProjectForm(
-                            project: project,
-                            onSubmit: (updatedProject) {
-                              context.read<ProjectCubit>().updateExistingProject(updatedProject);
-                            },
-                          );
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        if (authState is AuthAuthenticated) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ProjectForm(
+                        project: project,
+                        onSubmit: (updatedProject) {
+                          context.read<ProjectCubit>().updateExistingProject(updatedProject);
                         },
                       );
                     },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      context.read<ProjectCubit>().removeProject(project.id);
-                    },
-                  ),
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        onTap: () {
-          // Logika untuk mengarahkan ke detail proyek atau link
-        },
-      ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  context.read<ProjectCubit>().removeProject(project.id);
+                },
+              ),
+            ],
+          );
+        }
+        return const SizedBox.shrink(); // Kosongkan jika tidak login
+      },
     );
   }
 }

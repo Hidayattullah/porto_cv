@@ -18,11 +18,51 @@ class ProjectListBody extends StatelessWidget {
           if (projectState.projects.isEmpty) {
             return const Center(child: Text('No projects found.'));
           }
-          return ListView.builder(
-            itemCount: projectState.projects.length,
-            itemBuilder: (context, index) {
-              final project = projectState.projects[index];
-              return ProjectListItem(project: project);
+
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              // Check the width of the screen to adjust the table layout
+              bool isSmallScreen = constraints.maxWidth < 600;
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: constraints.maxWidth,
+                  ),
+                  child: DataTable(
+                    columnSpacing: isSmallScreen ? 10 : 20,
+                    columns: const [
+                      DataColumn(label: Text('Title')),
+                      DataColumn(label: Text('Description')),
+                      DataColumn(label: Text('Start Date')),
+                      DataColumn(label: Text('End Date')),
+                      DataColumn(label: Text('Actions')),
+                    ],
+                    rows: projectState.projects.map((project) {
+                      return DataRow(cells: [
+                        DataCell(Text(
+                          project.title,
+                          style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+                        )),
+                        DataCell(Text(
+                          project.description,
+                          style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+                        )),
+                        DataCell(Text(
+                          project.startDate.toString(),
+                          style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+                        )),
+                        DataCell(Text(
+                          project.endDate.toString(),
+                          style: TextStyle(fontSize: isSmallScreen ? 12 : 16),
+                        )),
+                        DataCell(ProjectListItem(project: project)),
+                      ]);
+                    }).toList(),
+                  ),
+                ),
+              );
             },
           );
         } else if (projectState is ProjectError) {
