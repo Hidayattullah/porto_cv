@@ -7,8 +7,20 @@ import '../../cubits/auth/auth_cubit.dart'; // Import AuthCubit
 import '../../cubits/auth/auth_state.dart'; // Import AuthState
 import '../../widgets/forms/project_form.dart';
 
-class ProjectListPage extends StatelessWidget {
+class ProjectListPage extends StatefulWidget {
   const ProjectListPage({super.key});
+
+  @override
+  _ProjectListPageState createState() => _ProjectListPageState();
+}
+
+class _ProjectListPageState extends State<ProjectListPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Memuat data proyek saat halaman diinisialisasi
+    context.read<ProjectCubit>().fetchProjects();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +43,63 @@ class ProjectListPage extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<ProjectCubit, ProjectState>(
-                builder: (context, state) {
-                  if (state is ProjectLoading) {
+                builder: (context, projectState) {
+                  if (projectState is ProjectLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state is ProjectLoaded) {
-                    // Menampilkan data meskipun hanya ada satu entri
-                    return state.projects.isEmpty 
+                  } else if (projectState is ProjectLoaded) {
+                    return projectState.projects.isEmpty
                         ? const Center(child: Text('No projects found.'))
                         : ListView.builder(
-                            itemCount: state.projects.length,
+                            itemCount: projectState.projects.length,
                             itemBuilder: (context, index) {
-                              final project = state.projects[index];
+                              final project = projectState.projects[index];
                               return Card(
                                 child: ListTile(
                                   title: Text(project.title),
                                   subtitle: Text(project.description),
-                                  trailing: Text('${project.startDate.year}'), // Tahun
+                                  trailing: BlocBuilder<AuthCubit, AuthState>(
+                                    builder: (context, authState) {
+                                      // Periksa jika authState adalah AuthAuthenticated
+                                      if (authState is AuthAuthenticated) {
+                                        return Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.edit),
+                                              onPressed: () {
+                                                // Aksi update
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return ProjectForm(
+                                                      project: project, // Mengirim proyek yang ada ke form
+                                                      onSubmit: (updatedProject) {
+                                                        // Panggil cubit untuk mengupdate proyek
+                                                        context
+                                                            .read<ProjectCubit>()
+                                                            .updateExistingProject(updatedProject);
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete),
+                                              onPressed: () {
+                                                // Aksi delete
+                                                context
+                                                    .read<ProjectCubit>()
+                                                    .removeProject(project.id);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                      // Jika tidak login, tidak menampilkan apa-apa
+                                      return const SizedBox.shrink(); // Kembali widget kosong
+                                    },
+                                  ),
                                   onTap: () {
                                     // Logika untuk mengarahkan ke detail proyek atau link
                                   },
@@ -54,8 +107,8 @@ class ProjectListPage extends StatelessWidget {
                               );
                             },
                           );
-                  } else if (state is ProjectError) {
-                    return Center(child: Text(state.message));
+                  } else if (projectState is ProjectError) {
+                    return Center(child: Text(projectState.message));
                   }
                   return const Center(child: Text('No projects found.'));
                 },
@@ -86,7 +139,7 @@ class ProjectListPage extends StatelessWidget {
             );
           }
           // Jika tidak login, jangan tampilkan FloatingActionButton
-          return Container();
+          return const SizedBox.shrink(); // Kembali widget kosong
         },
       ),
     );
