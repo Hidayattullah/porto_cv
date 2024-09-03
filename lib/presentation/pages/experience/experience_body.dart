@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/experience/experience_cubit.dart';
 import '../../cubits/experience/experience_state.dart';
-import '../../widgets/cards/ovalcard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'experience_add.dart';
@@ -85,53 +84,51 @@ class _ExperienceSecState extends State<ExperienceSec> {
                   children: experiences.map((experience) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Dismissible(
-                        key: Key(experience.id),
-                        onDismissed: (direction) {
-                          if (_user != null) {
-                            context
-                                .read<ExperienceCubit>()
-                                .deleteExistingExperience(experience.id);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Anda harus login untuk menghapus pengalaman.'),
-                                behavior: SnackBarBehavior.floating,  
-                              ),
-                            );
-                          }
+                      child: ListTile(
+                        onTap: () {
+                          // Action on click, could be navigating to a detail page or opening a link
+                          // Example: Navigator.pushNamed(context, '/experienceDetail', arguments: experience);
                         },
-                        background: Container(
-                          color: Colors.red,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          child: const Icon(Icons.delete, color: Colors.white),
+                        title: Text(
+                          experience.title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent,
+                          ),
                         ),
-                        child: OvalCard(
-                          title: experience.title,
-                          description: "${experience.description}\n"
-                              "Start Date: ${formatDate(experience.startDate)}\n"
-                              "End Date: ${experience.endDate != null ? formatDate(experience.endDate!) : 'Present'}",
-                          showButtons: _user != null,
-                          onUpdate: _user != null
-                              ? () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => UpdateExperienceDialog(
-                                      experience: experience,
-                                      onUpdateExperience: (updatedExperience) {
-                                        context.read<ExperienceCubit>().updateExistingExperience(updatedExperience);
-                                      },
-                                    ),
-                                  );
-                                }
-                              : () {},
-                          onDelete: _user != null
-                              ? () {
-                                  context.read<ExperienceCubit>().deleteExistingExperience(experience.id);
-                                }
-                              : () {},
+                        subtitle: Text(
+                          "${experience.description}\n"
+                          "Start Date: ${formatDate(experience.startDate)}\n"
+                          "End Date: ${experience.endDate != null ? formatDate(experience.endDate!) : 'Present'}",
                         ),
+                        trailing: _user != null
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => UpdateExperienceDialog(
+                                          experience: experience,
+                                          onUpdateExperience: (updatedExperience) {
+                                            context.read<ExperienceCubit>().updateExistingExperience(updatedExperience);
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    onPressed: () {
+                                      context.read<ExperienceCubit>().deleteExistingExperience(experience.id);
+                                    },
+                                  ),
+                                ],
+                              )
+                            : null,
                       ),
                     );
                   }).toList(),
