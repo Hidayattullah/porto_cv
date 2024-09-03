@@ -24,6 +24,7 @@ class DesktopSec extends StatelessWidget {
                   Text('Login berhasil!'),
                 ],
               ),
+              behavior: SnackBarBehavior.floating,
               duration: Duration(seconds: 2),
             ),
           );
@@ -38,6 +39,7 @@ class DesktopSec extends StatelessWidget {
                   Text('Logout berhasil!'),
                 ],
               ),
+              behavior: SnackBarBehavior.floating,
               duration: Duration(seconds: 2),
             ),
           );

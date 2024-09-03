@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import '../../cubits/auth/auth_cubit.dart';
 import '../../cubits/auth/auth_state.dart';
-import '../../pages/experience/experience_sec.dart';
+import '../../pages/experience/experience_body.dart';
 import '../../pages/content/home_sec.dart';
 import '../../pages/content/project_sec.dart';
 import '../../pages/content/contact_sec.dart';
@@ -26,6 +26,7 @@ class MobileSec extends StatelessWidget {
                   Text('Login berhasil!'),
                 ],
               ),
+              behavior: SnackBarBehavior.floating,
               duration: Duration(seconds: 2),
             ),
           );
@@ -40,6 +41,7 @@ class MobileSec extends StatelessWidget {
                   Text('Logout berhasil!'),
                 ],
               ),
+              behavior: SnackBarBehavior.floating,
               duration: Duration(seconds: 2),
             ),
           );
