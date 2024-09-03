@@ -3,55 +3,55 @@ import 'package:flutter/material.dart';
 class OvalCard extends StatelessWidget {
   final String title;
   final String description;
+  final bool showButtons; // Menampilkan tombol update dan delete hanya jika user login
+  final VoidCallback onUpdate;
+  final VoidCallback onDelete;
 
   const OvalCard({
     super.key,
     required this.title,
     required this.description,
+    required this.showButtons,
+    required this.onUpdate,
+    required this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final cardWidth = screenWidth * 0.5; // Lebar card sebagai persentase dari lebar layar
-
-    return SizedBox(
-      width: cardWidth,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5), // Menggunakan radius oval
-        ),
-        elevation: 5,
-        child: ListTile(
-          leading: Container(
-            width: 50,
-            height: 50, // Lebar header samping
-            color: Colors.blue, // Warna header
-            child: const Center(
-              child: Text(
-                'Header',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          title: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          subtitle: Text(
-            description,
-            style: const TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          isThreeLine: true, // Mengatur agar subtitle dapat menggunakan beberapa baris
+            const SizedBox(height: 10),
+            Text(description),
+            if (showButtons) // Tampilkan tombol hanya jika showButtons == true
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: onUpdate,
+                    child: const Text('Update'),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: onDelete,
+                    child: const Text('Delete'),
+                  ),
+                ],
+              ),
+          ],
         ),
       ),
     );

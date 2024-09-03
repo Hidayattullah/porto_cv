@@ -19,7 +19,7 @@ class LoginPage extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthAuthenticated) {
             // Jika login berhasil, navigasi ke halaman landing_page
-            Navigator.pushReplacementNamed(context, '/landing');
+            Navigator.of(context).pushNamedAndRemoveUntil('/landing', (Route<dynamic> route) => false);
           } else if (state is AuthError) {
             // Jika ada error, tampilkan pesan error
             ScaffoldMessenger.of(context).showSnackBar(
