@@ -12,6 +12,7 @@ import 'presentation/pages/project/project_list_page.dart';
 // dependencies module
 import 'dependencies/auth_dependency.dart';
 import 'dependencies/project_dependency.dart';
+import 'dependencies/contact_dependency.dart';
 import 'dependencies/experience_dependency.dart'; // Import Experience Dependencies
 
 void main() async {
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ...provideAuthDependencies(), // Menggunakan Auth Dependencies
         ...provideProjectDependencies(), // Menggunakan Project Dependencies
         ...provideExperienceDependencies(), // Menggunakan Experience Dependencies
+        ...provideContactDependencies(),
         BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(), // Inisialisasi NavigationCubit
         ),

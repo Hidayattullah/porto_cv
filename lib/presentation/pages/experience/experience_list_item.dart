@@ -16,8 +16,8 @@ class ExperienceListItem extends StatelessWidget {
     final user = auth.currentUser;
 
     // Gunakan nilai string langsung dari entity, atau gunakan nilai default jika null
-    final String startDate = experience.startDate ?? 'Unknown Start Date';
-    final String endDate = experience.endDate ?? 'Present';
+    final String startDate = experience.startDate;
+    final String endDate = experience.endDate;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
