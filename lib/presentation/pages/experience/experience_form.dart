@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../domain/entities/experience_entity.dart';
 
-class AddExperienceDialog extends StatelessWidget {
+class ExperienceForm extends StatelessWidget {
   final Function(ExperienceEntity) onAddExperience;
 
-  const AddExperienceDialog({super.key, required this.onAddExperience});
+  const ExperienceForm({super.key, required this.onAddExperience});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,11 @@ class AddExperienceDialog extends StatelessWidget {
             ),
             TextField(
               controller: startDateController,
-              decoration: const InputDecoration(labelText: 'Start Date (YYYY-MM-DD)'),
+              decoration: const InputDecoration(labelText: 'Start Date (DD-MM-YYYY)'),
             ),
             TextField(
               controller: endDateController,
-              decoration: const InputDecoration(labelText: 'End Date (YYYY-MM-DD, optional)'),
+              decoration: const InputDecoration(labelText: 'End Date (DD-MM-YYYY or PRESENT)'),
             ),
             TextField(
               controller: descriptionController,

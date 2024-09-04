@@ -5,7 +5,7 @@ import '../../../domain/entities/project_entity.dart';
 import '../../cubits/project/project_cubit.dart';
 import '../../cubits/auth/auth_cubit.dart';
 import '../../cubits/auth/auth_state.dart';
-import '../../widgets/forms/project_form.dart';
+import 'project_form.dart';
 
 class ProjectListItem extends StatelessWidget {
   final ProjectEntity project;

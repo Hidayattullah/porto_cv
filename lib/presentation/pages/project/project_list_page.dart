@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/auth/auth_cubit.dart';
 import '../../cubits/auth/auth_state.dart';
 import '../../cubits/project/project_cubit.dart';
-import '../../widgets/forms/project_form.dart';
+import 'project_form.dart';
 import 'project_list_body.dart';
 
 class ProjectListPage extends StatefulWidget {
