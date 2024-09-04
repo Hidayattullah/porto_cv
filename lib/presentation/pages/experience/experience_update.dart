@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart'; // Import the intl package for date formatting
 import '../../../domain/entities/experience_entity.dart';
 import '../../cubits/experience/experience_cubit.dart';
 
@@ -9,12 +8,13 @@ class ExperienceListUpdate extends StatelessWidget {
 
   const ExperienceListUpdate({required this.experience, super.key});
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     final titleController = TextEditingController(text: experience.title);
+    final companyController = TextEditingController(text: experience.company);
     final descriptionController = TextEditingController(text: experience.description);
-    final startDateController = TextEditingController(text: DateFormat('dd-MM-yyyy').format(experience.startDate));
-    final endDateController = TextEditingController(text: experience.endDate != null ? DateFormat('dd-MM-yyyy').format(experience.endDate!) : '');
+    final startDateController = TextEditingController(text: experience.startDate);
+    final endDateController = TextEditingController(text: experience.endDate);
 
     return AlertDialog(
       title: const Text('Update Experience'),
@@ -23,57 +23,37 @@ class ExperienceListUpdate extends StatelessWidget {
         children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(
-              labelText: 'Title',
-            ),
+            decoration: const InputDecoration(labelText: 'Title'),
           ),
           TextField(
-            controller: descriptionController,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-            ),
+            controller: companyController,
+            decoration: const InputDecoration(labelText: 'Company'),
           ),
           TextField(
             controller: startDateController,
-            decoration: const InputDecoration(
-              labelText: 'Start Date (dd-MM-yyyy)',
-            ),
-            keyboardType: TextInputType.datetime,
+            decoration: const InputDecoration(labelText: 'Start Date'),
           ),
           TextField(
             controller: endDateController,
-            decoration: const InputDecoration(
-              labelText: 'End Date (dd-MM-yyyy)',
-            ),
-            keyboardType: TextInputType.datetime,
+            decoration: const InputDecoration(labelText: 'End Date'),
+          ),
+          TextField(
+            controller: descriptionController,
+            decoration: const InputDecoration(labelText: 'Description'),
           ),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () {
-            // Parsing dates from input
-            DateTime? startDate;
-            DateTime? endDate;
-            try {
-              startDate = DateFormat('dd-MM-yyyy').parse(startDateController.text);
-              if (endDateController.text.isNotEmpty) {
-                endDate = DateFormat('dd-MM-yyyy').parse(endDateController.text);
-              }
-            } catch (e) {
-              // Handle date parsing error
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Invalid date format. Please use dd-MM-yyyy')),
-              );
-              return;
-            }
-
-            // Update experience logic
-            final updatedExperience = experience.copyWith(
+            final updatedExperience = ExperienceEntity(
+              id: experience.id,
               title: titleController.text,
+              company: companyController.text,
+              startDate: startDateController.text,
+              endDate: endDateController.text,
               description: descriptionController.text,
-              startDate: startDate,
-              endDate: endDate,
+              tags: experience.tags,
             );
 
             context.read<ExperienceCubit>().updateExistingExperience(updatedExperience);

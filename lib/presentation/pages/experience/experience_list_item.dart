@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart'; // Tambahkan ini
 import '../../../domain/entities/experience_entity.dart';
 import '../../cubits/experience/experience_cubit.dart';
 import 'experience_update.dart';
@@ -15,10 +14,10 @@ class ExperienceListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
     final user = auth.currentUser;
-    
-    String formatDate(DateTime date) {
-      return DateFormat('dd-MM-yyyy').format(date); // Perbaiki ini
-    }
+
+    // Gunakan nilai string langsung dari entity, atau gunakan nilai default jika null
+    final String startDate = experience.startDate ?? 'Unknown Start Date';
+    final String endDate = experience.endDate ?? 'Present';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -36,8 +35,8 @@ class ExperienceListItem extends StatelessWidget {
         ),
         subtitle: Text(
           "${experience.description}\n"
-          "Start Date: ${formatDate(experience.startDate)}\n"
-          "End Date: ${experience.endDate != null ? formatDate(experience.endDate!) : 'Present'}",
+          "Start Date: $startDate\n"
+          "End Date: $endDate",
         ),
         trailing: user != null
             ? Row(

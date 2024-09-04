@@ -1,5 +1,3 @@
-// File: lib/data/models/experience/experience_model.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../domain/entities/experience_entity.dart';
 
@@ -9,7 +7,7 @@ class ExperienceModel extends ExperienceEntity {
     required super.title,
     required super.company,
     required super.startDate,
-    super.endDate,
+    required super.endDate,
     required super.description,
     super.tags,
   });
@@ -19,8 +17,8 @@ class ExperienceModel extends ExperienceEntity {
       id: id,
       title: map['title'] ?? '',
       company: map['company'] ?? '',
-      startDate: (map['startDate'] as Timestamp).toDate(),
-      endDate: map['endDate'] != null ? (map['endDate'] as Timestamp).toDate() : null,
+      startDate: map['startDate'] ?? '',
+      endDate: map['endDate'] ?? '',
       description: map['description'] ?? '',
       tags: List<String>.from(map['tags'] ?? []),
     );

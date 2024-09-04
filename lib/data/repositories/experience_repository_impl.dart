@@ -1,4 +1,3 @@
-// File: lib/data/models/repositories/experience_repository_impl.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart'; // Untuk kDebugMode
 import '../../../domain/entities/experience_entity.dart';
@@ -18,8 +17,8 @@ class ExperienceRepositoryImpl implements ExperienceRepository {
       await _firestore.collection('experiences').add({
         'title': experience.title,
         'company': experience.company,
-        'startDate': experience.startDate.toIso8601String(),
-        'endDate': experience.endDate?.toIso8601String(),
+        'startDate': experience.startDate,
+        'endDate': experience.endDate,
         'description': experience.description,
         'tags': experience.tags,
       });
@@ -43,8 +42,8 @@ class ExperienceRepositoryImpl implements ExperienceRepository {
       await _firestore.collection('experiences').doc(experience.id).update({
         'title': experience.title,
         'company': experience.company,
-        'startDate': experience.startDate.toIso8601String(),
-        'endDate': experience.endDate?.toIso8601String(),
+        'startDate': experience.startDate,
+        'endDate': experience.endDate,
         'description': experience.description,
         'tags': experience.tags,
       });
@@ -90,8 +89,8 @@ class ExperienceRepositoryImpl implements ExperienceRepository {
           id: doc.id,
           title: data['title'],
           company: data['company'],
-          startDate: DateTime.parse(data['startDate']),
-          endDate: DateTime.parse(data['endDate']),
+          startDate: data['startDate'],
+          endDate: data['endDate'],
           description: data['description'],
           tags: List<String>.from(data['tags']),
         );

@@ -10,9 +10,9 @@ class ExperienceForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final titleController = TextEditingController();
     final companyController = TextEditingController();
-    final descriptionController = TextEditingController();
     final startDateController = TextEditingController();
     final endDateController = TextEditingController();
+    final descriptionController = TextEditingController();
 
     return AlertDialog(
       title: const Text('Add New Experience'),
@@ -30,11 +30,11 @@ class ExperienceForm extends StatelessWidget {
             ),
             TextField(
               controller: startDateController,
-              decoration: const InputDecoration(labelText: 'Start Date (DD-MM-YYYY)'),
+              decoration: const InputDecoration(labelText: 'Start Date'),
             ),
             TextField(
               controller: endDateController,
-              decoration: const InputDecoration(labelText: 'End Date (DD-MM-YYYY or PRESENT)'),
+              decoration: const InputDecoration(labelText: 'End Date'),
             ),
             TextField(
               controller: descriptionController,
@@ -55,13 +55,11 @@ class ExperienceForm extends StatelessWidget {
           onPressed: () {
             final title = titleController.text;
             final company = companyController.text;
+            final startDate = startDateController.text;
+            final endDate = endDateController.text;
             final description = descriptionController.text;
-            final startDate = DateTime.tryParse(startDateController.text);
-            final endDate = endDateController.text.isNotEmpty
-                ? DateTime.tryParse(endDateController.text)
-                : null;
 
-            if (title.isNotEmpty && company.isNotEmpty && startDate != null && description.isNotEmpty) {
+            if (title.isNotEmpty && company.isNotEmpty && startDate.isNotEmpty && description.isNotEmpty) {
               final newExperience = ExperienceEntity(
                 id: '', // ID akan digenerate saat menambah ke database
                 title: title,
@@ -73,14 +71,10 @@ class ExperienceForm extends StatelessWidget {
               );
 
               onAddExperience(newExperience);
-              Navigator.of(context).pop(); // Tutup dialog setelah menambah
+              Navigator.of(context).pop();
             } else {
-              // Tampilkan pesan kesalahan atau feedback ke user jika input tidak valid
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Please fill all required fields.'),
-                  behavior: SnackBarBehavior.floating,
-                ),
+                const SnackBar(content: Text('All fields are required!')),
               );
             }
           },
