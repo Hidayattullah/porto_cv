@@ -5,7 +5,7 @@ import '../../cubits/auth/auth_cubit.dart';
 import '../../cubits/auth/auth_state.dart';
 import '../../pages/content/home_sec.dart';
 import '../../pages/content/project_sec.dart';
-import '../../pages/content/contact_sec.dart';
+import '../../pages/contact/contact_sec.dart';
 import '../../pages/experience/experience_sec.dart';
 
 class MobileSec extends StatelessWidget {

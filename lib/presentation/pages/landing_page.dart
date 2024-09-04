@@ -4,7 +4,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../cubits/navigation/navigation_cubit.dart';
 import '../widgets/navigation/desktop_sec.dart';
 import '../widgets/navigation/mobile_sec.dart';
-import 'content/contact_sec.dart';
+import 'contact/contact_sec.dart';
 import 'content/home_sec.dart';
 import 'content/project_sec.dart';
 import 'experience/experience_sec.dart';
