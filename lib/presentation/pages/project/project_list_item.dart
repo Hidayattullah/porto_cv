@@ -1,52 +1,72 @@
-// File: presentation/pages/project_list_page/project_list_item.dart
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/project_entity.dart';
 import '../../cubits/project/project_cubit.dart';
-import '../../cubits/auth/auth_cubit.dart';
-import '../../cubits/auth/auth_state.dart';
-import 'project_form.dart';
+import 'project_update.dart'; // Anda bisa membuat dialog update serupa dengan 'experience_update.dart'
 
 class ProjectListItem extends StatelessWidget {
   final ProjectEntity project;
 
-  const ProjectListItem({required this.project, super.key});
+  const ProjectListItem({
+    required this.project,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthState>(
-      builder: (context, authState) {
-        if (authState is AuthAuthenticated) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ProjectForm(
-                        project: project,
-                        onSubmit: (updatedProject) {
-                          context.read<ProjectCubit>().updateExistingProject(updatedProject);
-                        },
+    final auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: ListTile(
+        onTap: () {
+          // Aksi yang dijalankan ketika item di-tap (contoh: detail project)
+          // Navigator.pushNamed(context, '/projectDetail', arguments: project);
+        },
+        title: Text(
+          project.title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.blueAccent,
+          ),
+        ),
+        subtitle: Text(
+          "Description: ${project.description.isNotEmpty ? project.description : 'No description available'}\n" // Tidak menggunakan ??
+          "Year: ${project.yearMade}\n"
+          "Built With: ${project.builtWith}\n"
+          "Made At: ${project.madeAt}\n"
+          "Link: ${project.link}",
+        ),
+        trailing: user != null
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      // Menampilkan dialog update project
+                      showDialog(
+                        context: context,
+                        builder: (context) => ProjectListUpdate(
+                          project: project,
+                        ),
                       );
                     },
-                  );
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {
-                  context.read<ProjectCubit>().removeProject(project.id);
-                },
-              ),
-            ],
-          );
-        }
-        return const SizedBox.shrink(); // Kosongkan jika tidak login
-      },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      // Menghapus project menggunakan ProjectCubit
+                      context.read<ProjectCubit>().removeProject(project.id);
+                    },
+                  ),
+                ],
+              )
+            : null,
+      ),
     );
   }
 }

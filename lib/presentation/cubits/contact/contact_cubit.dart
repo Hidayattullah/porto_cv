@@ -1,9 +1,9 @@
 // File: lib/presentation/cubits/contact/contact_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:porto_cv/domain/usercases/contact/add_contact.dart';
-import 'package:porto_cv/domain/usercases/contact/delete_contact.dart';
-import 'package:porto_cv/domain/usercases/contact/get_contact.dart';
-import 'package:porto_cv/domain/usercases/contact/update_contact.dart';
+import 'package:porto_cv/domain/usescases/contact/add_contact.dart';
+import 'package:porto_cv/domain/usescases/contact/delete_contact.dart';
+import 'package:porto_cv/domain/usescases/contact/get_contact.dart';
+import 'package:porto_cv/domain/usescases/contact/update_contact.dart';
 import '../../../domain/entities/contact_entity.dart';
 import 'contact_state.dart';
 

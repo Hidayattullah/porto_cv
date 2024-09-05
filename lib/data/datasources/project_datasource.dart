@@ -1,12 +1,11 @@
-// File: data/datasources/firebase_datasource.dart
+// File: data/datasources/project_datasource.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/project/project_model.dart';
 
-
-class FirebaseDataSource {
+class ProjectDataSource {
   final FirebaseFirestore _firestore;
 
-  FirebaseDataSource(this._firestore);
+  ProjectDataSource(this._firestore);
 
   Future<void> addProject(ProjectModel project) async {
     await _firestore.collection('projects').add(project.toMap());

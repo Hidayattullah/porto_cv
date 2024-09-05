@@ -4,7 +4,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import '../../cubits/auth/auth_cubit.dart';
 import '../../cubits/auth/auth_state.dart';
 import '../../pages/content/home_sec.dart';
-import '../../pages/content/project_sec.dart';
+import '../../pages/project/project_sec.dart';
 import '../../pages/contact/contact_sec.dart';
 import '../../pages/experience/experience_sec.dart';
 

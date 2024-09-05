@@ -1,79 +1,89 @@
-// File: presentation/widgets/project_form.dart
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart'; // Package untuk membuat ID unik
 import '../../../domain/entities/project_entity.dart';
 
-class ProjectForm extends StatefulWidget {
-  final ProjectEntity? project; // Tambahkan parameter untuk proyek yang sudah ada
-  final Function(ProjectEntity) onSubmit;
+class ProjectForm extends StatelessWidget {
+  final Function(ProjectEntity) onAddProject;
 
-  const ProjectForm({this.project, required this.onSubmit, super.key});
-
-  @override
-  _ProjectFormState createState() => _ProjectFormState();
-}
-
-class _ProjectFormState extends State<ProjectForm> {
-  final _formKey = GlobalKey<FormState>();
-  late String _title;
-  late String _description;
-
-  @override
-  void initState() {
-    super.initState();
-    // Inisialisasi nilai form berdasarkan proyek yang sudah ada, jika ada
-    _title = widget.project?.title ?? '';
-    _description = widget.project?.description ?? '';
-  }
+  const ProjectForm({super.key, required this.onAddProject});
 
   @override
   Widget build(BuildContext context) {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    final yearController = TextEditingController();
+    final builtWithController = TextEditingController();
+    final madeAtController = TextEditingController();
+    final linkController = TextEditingController();
+
     return AlertDialog(
-      title: Text(widget.project == null ? 'Add New Project' : 'Edit Project'),
-      content: Form(
-        key: _formKey,
+      title: const Text('Add New Project'),
+      content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(
-              initialValue: _title,
+            TextField(
+              controller: titleController,
               decoration: const InputDecoration(labelText: 'Title'),
-              onSaved: (value) => _title = value ?? '',
-              validator: (value) =>
-                  value == null || value.isEmpty ? 'Please enter a title' : null,
             ),
-            TextFormField(
-              initialValue: _description,
+            TextField(
+              controller: descriptionController,
               decoration: const InputDecoration(labelText: 'Description'),
-              onSaved: (value) => _description = value ?? '',
-              validator: (value) => value == null || value.isEmpty
-                  ? 'Please enter a description'
-                  : null,
+            ),
+            TextField(
+              controller: yearController,
+              decoration: const InputDecoration(labelText: 'Year'),
+            ),
+            TextField(
+              controller: builtWithController,
+              decoration: const InputDecoration(labelText: 'Built With'),
+            ),
+            TextField(
+              controller: madeAtController,
+              decoration: const InputDecoration(labelText: 'Made At'),
+            ),
+            TextField(
+              controller: linkController,
+              decoration: const InputDecoration(labelText: 'Project Link'),
             ),
           ],
         ),
       ),
       actions: [
         TextButton(
+          child: const Text('Cancel'),
           onPressed: () {
-            if (_formKey.currentState?.validate() ?? false) {
-              _formKey.currentState?.save();
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          child: const Text('Add'),
+          onPressed: () {
+            final title = titleController.text;
+            final description = descriptionController.text;
+            final year = yearController.text;
+            final builtWith = builtWithController.text;
+            final madeAt = madeAtController.text;
+            final link = linkController.text;
 
-              // Cek apakah kita sedang membuat proyek baru atau mengedit yang sudah ada
+            if (title.isNotEmpty && description.isNotEmpty && year.isNotEmpty && builtWith.isNotEmpty && madeAt.isNotEmpty) {
               final newProject = ProjectEntity(
-                id: widget.project?.id ?? const Uuid().v4(), // Jika proyek ada, gunakan ID yang sama
-                title: _title,
-                description: _description,
-                startDate: widget.project?.startDate ?? DateTime.now(), // Gunakan startDate proyek yang ada atau default
-                endDate: widget.project?.endDate ?? DateTime.now().add(const Duration(days: 30)), // Gunakan endDate proyek yang ada atau default
-                isCompleted: widget.project?.isCompleted ?? false, // Gunakan status proyek yang ada atau default
+                id: '', // ID will be generated automatically
+                title: title,
+                description: description,
+                yearMade: year,
+                builtWith: builtWith,
+                madeAt: madeAt,
+                link: link,
               );
 
-              widget.onSubmit(newProject);
+              onAddProject(newProject);
               Navigator.of(context).pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('All fields are required!')),
+              );
             }
           },
-          child: const Text('Submit'),
         ),
       ],
     );

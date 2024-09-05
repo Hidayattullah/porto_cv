@@ -6,7 +6,7 @@ import '../widgets/navigation/desktop_sec.dart';
 import '../widgets/navigation/mobile_sec.dart';
 import 'contact/contact_sec.dart';
 import 'content/home_sec.dart';
-import 'content/project_sec.dart';
+import 'project/project_sec.dart';
 import 'experience/experience_sec.dart';
 
 class LandingPage extends StatefulWidget {

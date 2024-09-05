@@ -4,25 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:porto_cv/firebase_options.dart';
-import 'presentation/cubits/navigation/navigation_cubit.dart'; // Import NavigationCubit
+import 'package:porto_cv/presentation/pages/project/project_body.dart';
+import 'dependencies/project_dependency.dart';
+import 'presentation/cubits/navigation/navigation_cubit.dart';
 import 'presentation/pages/auth/login.dart';
 import 'presentation/pages/landing_page.dart';
-import 'presentation/pages/project/project_list_page.dart';
 
 // dependencies module
 import 'dependencies/auth_dependency.dart';
-import 'dependencies/project_dependency.dart';
 import 'dependencies/contact_dependency.dart';
 import 'dependencies/experience_dependency.dart'; // Import Experience Dependencies
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   if (kDebugMode) {
     print('Memulai inisialisasi Firebase...');
   }
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ); // Inisialisasi Firebase
+  );
+  
   if (kDebugMode) {
     print('Firebase berhasil diinisialisasi.');
   }
@@ -44,7 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(), // Inisialisasi NavigationCubit
         ),
-        // Tambahkan cubit atau provider lainnya di sini
+        // Tambahkan cubit atau provider lainnya jika diperlukan
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -54,9 +57,9 @@ class MyApp extends StatelessWidget {
         ),
         home: const LandingPage(), // Halaman utama setelah login berhasil
         routes: {
-          '/login': (context) => const LoginPage(), // Definisikan route untuk halaman login
-          '/landing': (context) => const LandingPage(), // Rute ke landing_page
-          '/projects': (context) => const ProjectListPage(), // Rute ke project_list_page
+          '/login': (context) => const LoginPage(), // Route untuk halaman login
+          '/landing': (context) => const LandingPage(), // Route untuk landing_page
+          '/projects': (context) => const ProjectListBody(), // Route ke project_list_page
           // Tambahkan route lain jika diperlukan
         },
       ),

@@ -1,6 +1,6 @@
 // File: data/repositories/project_repository_impl.dart
-import 'package:cloud_firestore/cloud_firestore.dart'; // Jika menggunakan Firebase
-import 'package:flutter/foundation.dart'; // Untuk kDebugMode
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../../domain/entities/project_entity.dart';
 import '../../domain/repositores/project_repository.dart';
 
@@ -19,9 +19,10 @@ class ProjectRepositoryImpl implements ProjectRepository {
         'id': project.id,
         'title': project.title,
         'description': project.description,
-        'startDate': project.startDate.toIso8601String(),
-        'endDate': project.endDate.toIso8601String(),
-        'isCompleted': project.isCompleted,
+        'yearMade': project.yearMade,
+        'builtWith': project.builtWith,
+        'madeAt': project.madeAt,
+        'link': project.link,
       });
       if (kDebugMode) {
         print('Project added successfully: ${project.title}');
@@ -30,7 +31,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
       if (kDebugMode) {
         print('Error adding project: $e');
       }
-      rethrow; // Optional: rethrow to let the error propagate
+      rethrow;
     }
   }
 
@@ -43,9 +44,10 @@ class ProjectRepositoryImpl implements ProjectRepository {
       await _firestore.collection('projects').doc(project.id).update({
         'title': project.title,
         'description': project.description,
-        'startDate': project.startDate.toIso8601String(),
-        'endDate': project.endDate.toIso8601String(),
-        'isCompleted': project.isCompleted,
+        'yearMade': project.yearMade,
+        'builtWith': project.builtWith,
+        'madeAt': project.madeAt,
+        'link': project.link,
       });
       if (kDebugMode) {
         print('Project updated successfully: ${project.title}');
@@ -89,9 +91,10 @@ class ProjectRepositoryImpl implements ProjectRepository {
           id: doc.id,
           title: data['title'],
           description: data['description'],
-          startDate: DateTime.parse(data['startDate']),
-          endDate: DateTime.parse(data['endDate']),
-          isCompleted: data['isCompleted'],
+          yearMade: data['yearMade'],
+          builtWith: data['builtWith'],
+          madeAt: data['madeAt'],
+          link: data['link'],
         );
       }).toList();
       if (kDebugMode) {

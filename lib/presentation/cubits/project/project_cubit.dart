@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart'; // Import untuk kDebugMode
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/project_entity.dart';
-import '../../../domain/usercases/project/add_project.dart';
-import '../../../domain/usercases/project/delete_project.dart';
-import '../../../domain/usercases/project/get_project.dart';
-import '../../../domain/usercases/project/update_project.dart';
+import '../../../domain/usescases/project/add_project.dart';
+import '../../../domain/usescases/project/delete_project.dart';
+import '../../../domain/usescases/project/get_project.dart';
+import '../../../domain/usescases/project/update_project.dart';
 import 'project_state.dart';
 
 class ProjectCubit extends Cubit<ProjectState> {

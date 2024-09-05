@@ -1,10 +1,10 @@
 // File: lib/dependencies/experience_dependency.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../data/repositories/experience_repository_impl.dart';
-import '../domain/usercases/experience/add_experience.dart';
-import '../domain/usercases/experience/delete_experience.dart';
-import '../domain/usercases/experience/get_experience.dart';
-import '../domain/usercases/experience/update_experience.dart';
+import '../domain/usescases/experience/add_experience.dart';
+import '../domain/usescases/experience/delete_experience.dart';
+import '../domain/usescases/experience/get_experience.dart';
+import '../domain/usescases/experience/update_experience.dart';
 import '../presentation/cubits/experience/experience_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
