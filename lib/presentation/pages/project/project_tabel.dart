@@ -54,65 +54,62 @@ class ProjectTable extends StatelessWidget {
                     },
                   ),
                   Expanded(
-                    child: DataTable(
-                      columns: const [
-                        DataColumn(label: Text('Title')),
-                        DataColumn(label: Text('Description')),
-                        DataColumn(label: Text('Year')),
-                        DataColumn(label: Text('Built With')),
-                        DataColumn(label: Text('Made At')),
-                        DataColumn(label: Text('Link')),
-                        DataColumn(label: Text('Actions')),
-                      ],
-                      rows: projects.map((project) {
-                        return DataRow(
-                          cells: [
-                            DataCell(Text(project.title)),
-                            DataCell(Text(project.description)),
-                            DataCell(Text(project.yearMade)),
-                            DataCell(Text(project.builtWith)),
-                            DataCell(Text(project.madeAt)),
-                            DataCell(Text(project.link)),
-                            DataCell(
-                              Row(
-                                children: [
-                                  // Tombol hanya muncul ketika user login
-                                  BlocBuilder<AuthCubit, AuthState>(
-                                    builder: (context, authState) {
-                                      if (authState is AuthAuthenticated) {
-                                        return Row(
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(Icons.edit),
-                                              onPressed: () {
-                                                // Navigasi ke halaman pengeditan
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => ProjectListUpdate(project: project),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(Icons.delete),
-                                              onPressed: () {
-                                                // Hapus project
-                                                context.read<ProjectCubit>().removeProject(project.id);
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                      return const SizedBox.shrink();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                    child: BlocBuilder<AuthCubit, AuthState>(
+                      builder: (context, authState) {
+                        bool isAuthenticated = authState is AuthAuthenticated;
+
+                        return DataTable(
+                          columns: [
+                            const DataColumn(label: Text('Title')),
+                            const DataColumn(label: Text('Description')),
+                            const DataColumn(label: Text('Year')),
+                            const DataColumn(label: Text('Built With')),
+                            const DataColumn(label: Text('Made At')),
+                            const DataColumn(label: Text('Link')),
+                            // Menampilkan kolom 'Actions' hanya jika user login
+                            if (isAuthenticated)
+                              const DataColumn(label: Text('Actions')),
                           ],
+                          rows: projects.map((project) {
+                            return DataRow(
+                              cells: [
+                                DataCell(Text(project.title)),
+                                DataCell(Text(project.description)),
+                                DataCell(Text(project.yearMade)),
+                                DataCell(Text(project.builtWith)),
+                                DataCell(Text(project.madeAt)),
+                                DataCell(Text(project.link)),
+                                if (isAuthenticated)
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          onPressed: () {
+                                            // Navigasi ke halaman pengeditan
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => ProjectListUpdate(project: project),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          onPressed: () {
+                                            // Hapus project
+                                            context.read<ProjectCubit>().removeProject(project.id);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          }).toList(),
                         );
-                      }).toList(),
+                      },
                     ),
                   ),
                 ],
