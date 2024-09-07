@@ -28,21 +28,9 @@ class ProjectBody extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: projects.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.white, // Warna latar belakang item
-                          borderRadius: BorderRadius.circular(5.0), // Border radius
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2), // Warna bayangan
-                              spreadRadius: 2,
-                              blurRadius: 6,
-                              offset: const Offset(2, 4), // Posisi bayangan
-                            ),
-                          ],
-                        ),
-                        child: ProjectListItem(project: projects[index]),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                        child: ProjectListItem(project: projects[index]), // No BoxDecoration here
                       );
                     },
                   ),
