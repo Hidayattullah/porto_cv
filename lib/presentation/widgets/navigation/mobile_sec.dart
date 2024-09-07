@@ -77,7 +77,13 @@ class MobileSec extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
-              sliver: const SliverToBoxAdapter(child: ExperienceSec()),
+              // Membatasi tinggi dari ExperienceSec agar tidak infinite
+              sliver: SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: const ExperienceSec(),
+                ),
+              ),
             ),
 
             // Sticky Header untuk Projects
@@ -92,7 +98,13 @@ class MobileSec extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
-              sliver: const SliverToBoxAdapter(child: ProjectSec()),
+              // Membatasi tinggi dari ProjectSec agar tidak infinite
+              sliver: SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: const ProjectSec(),
+                ),
+              ),
             ),
 
             // Sticky Header untuk Contact
@@ -107,7 +119,13 @@ class MobileSec extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
-              sliver: const SliverToBoxAdapter(child: ContactSec()),
+              // Membatasi tinggi dari ContactSec agar tidak infinite
+              sliver: SliverToBoxAdapter(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: const ContactSec(),
+                ),
+              ),
             ),
           ],
         ),
