@@ -12,7 +12,8 @@ import 'presentation/pages/landing_page.dart';
 // dependencies module
 import 'dependencies/auth_dependency.dart';
 import 'dependencies/contact_dependency.dart';
-import 'dependencies/experience_dependency.dart'; // Import Experience Dependencies
+import 'dependencies/experience_dependency.dart';
+import 'presentation/pages/project/project_tabel.dart'; // Import Experience Dependencies
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (context) => const LoginPage(), // Route untuk halaman login
           '/landing': (context) => const LandingPage(), // Route untuk landing_page
-          // Tambahkan route lain jika diperlukan
+          '/projectTable': (context) => const ProjectTable(),// Tambahkan route lain jika diperlukan
         },
       ),
     );

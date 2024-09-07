@@ -43,12 +43,16 @@ class ProjectCubit extends Cubit<ProjectState> {
     if (kDebugMode) {
       print('Creating project: ${project.title}');
     }
+    emit(ProjectLoading());
     try {
       await addProject(project);
       if (kDebugMode) {
         print('Project created successfully: ${project.title}');
       }
-      fetchProjects(); // Refresh project list after adding new project
+      // Emit state untuk project yang berhasil ditambahkan
+      emit(ProjectCreated());
+      // Fetch ulang project list setelah berhasil menambah project
+      fetchProjects();
     } catch (e) {
       if (kDebugMode) {
         print('Error creating project: $e');
@@ -61,12 +65,16 @@ class ProjectCubit extends Cubit<ProjectState> {
     if (kDebugMode) {
       print('Updating project: ${project.title}');
     }
+    emit(ProjectLoading());
     try {
       await updateProject(project);
       if (kDebugMode) {
         print('Project updated successfully: ${project.title}');
       }
-      fetchProjects(); // Refresh project list after updating project
+      // Emit state untuk project yang berhasil diupdate
+      emit(ProjectUpdated());
+      // Fetch ulang project list setelah berhasil mengupdate project
+      fetchProjects();
     } catch (e) {
       if (kDebugMode) {
         print('Error updating project: $e');
@@ -79,12 +87,16 @@ class ProjectCubit extends Cubit<ProjectState> {
     if (kDebugMode) {
       print('Removing project: $projectId');
     }
+    emit(ProjectLoading());
     try {
       await deleteProject(projectId);
       if (kDebugMode) {
         print('Project removed successfully: $projectId');
       }
-      fetchProjects(); // Refresh project list after deleting project
+      // Emit state untuk project yang berhasil dihapus
+      emit(ProjectDeleted());
+      // Fetch ulang project list setelah berhasil menghapus project
+      fetchProjects();
     } catch (e) {
       if (kDebugMode) {
         print('Error removing project: $e');
