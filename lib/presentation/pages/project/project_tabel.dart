@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../cubits/auth/auth_state.dart'; // Pastikan ini benar dari cubit auth Anda
+import '../../cubits/auth/auth_state.dart'; // AuthCubit import
 import '../../cubits/project/project_cubit.dart';
 import '../../cubits/project/project_state.dart';
 import '../../cubits/auth/auth_cubit.dart'; // Import AuthCubit
+import 'project_form.dart'; // Form untuk menambah project
+import 'project_update.dart'; // Import halaman update
 
 class ProjectTable extends StatelessWidget {
   const ProjectTable({super.key});
@@ -31,15 +33,24 @@ class ProjectTable extends StatelessWidget {
                   // Cek apakah pengguna sudah login menggunakan AuthCubit
                   BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, authState) {
-                      if (authState is AuthAuthenticated) { // Ganti dengan state yang sesuai dari AuthCubit
+                      if (authState is AuthAuthenticated) {
                         return ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/projectForm');
+                            // Menampilkan form dialog untuk menambahkan project baru
+                            showDialog(
+                              context: context,
+                              builder: (context) => ProjectForm(
+                                onAddProject: (newProject) {
+                                  // Logika untuk menambahkan project baru menggunakan Cubit
+                                  context.read<ProjectCubit>().createProject(newProject);
+                                },
+                              ),
+                            );
                           },
                           child: const Text('Add New Project'),
                         );
                       }
-                      return const SizedBox.shrink(); // Tombol hilang jika tidak login
+                      return const SizedBox.shrink();
                     },
                   ),
                   Expanded(
@@ -65,18 +76,35 @@ class ProjectTable extends StatelessWidget {
                             DataCell(
                               Row(
                                 children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () {
-                                      // Navigasi ke halaman pengeditan
-                                      Navigator.pushNamed(context, '/editProject', arguments: project);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      // Hapus project
-                                      context.read<ProjectCubit>().removeProject(project.id);
+                                  // Tombol hanya muncul ketika user login
+                                  BlocBuilder<AuthCubit, AuthState>(
+                                    builder: (context, authState) {
+                                      if (authState is AuthAuthenticated) {
+                                        return Row(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.edit),
+                                              onPressed: () {
+                                                // Navigasi ke halaman pengeditan
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => ProjectListUpdate(project: project),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete),
+                                              onPressed: () {
+                                                // Hapus project
+                                                context.read<ProjectCubit>().removeProject(project.id);
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                      return const SizedBox.shrink();
                                     },
                                   ),
                                 ],

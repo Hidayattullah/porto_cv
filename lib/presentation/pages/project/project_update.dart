@@ -12,50 +12,48 @@ class ProjectListUpdate extends StatelessWidget {
   Widget build(BuildContext context) {
     final titleController = TextEditingController(text: project.title);
     final descriptionController = TextEditingController(text: project.description);
-    final yearMadeController = TextEditingController(text: project.yearMade); // Menggunakan String
+    final yearMadeController = TextEditingController(text: project.yearMade);
     final builtWithController = TextEditingController(text: project.builtWith);
     final madeAtController = TextEditingController(text: project.madeAt);
     final linkController = TextEditingController(text: project.link);
 
     return AlertDialog(
       title: const Text('Update Project'),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Input field untuk title
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(labelText: 'Project Title'),
-            ),
-            // Input field untuk description
-            TextField(
-              controller: descriptionController,
-              decoration: const InputDecoration(labelText: 'Project Description'),
-              maxLines: 3,
-            ),
-            // Input field untuk year made (String)
-            TextField(
-              controller: yearMadeController,
-              decoration: const InputDecoration(labelText: 'Year Made'),
-            ),
-            // Input field untuk built with
-            TextField(
-              controller: builtWithController,
-              decoration: const InputDecoration(labelText: 'Built With'),
-            ),
-            // Input field untuk made at
-            TextField(
-              controller: madeAtController,
-              decoration: const InputDecoration(labelText: 'Made At'),
-            ),
-            // Input field untuk link
-            TextField(
-              controller: linkController,
-              decoration: const InputDecoration(labelText: 'Link'),
-            ),
-          ],
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Input field untuk title
+          TextField(
+            controller: titleController,
+            decoration: const InputDecoration(labelText: 'Project Title'),
+          ),
+          // Input field untuk description
+          TextField(
+            controller: descriptionController,
+            decoration: const InputDecoration(labelText: 'Project Description'),
+            maxLines: 3,
+          ),
+          // Input field untuk year made
+          TextField(
+            controller: yearMadeController,
+            decoration: const InputDecoration(labelText: 'Year Made'),
+          ),
+          // Input field untuk built with
+          TextField(
+            controller: builtWithController,
+            decoration: const InputDecoration(labelText: 'Built With'),
+          ),
+          // Input field untuk made at
+          TextField(
+            controller: madeAtController,
+            decoration: const InputDecoration(labelText: 'Made At'),
+          ),
+          // Input field untuk link
+          TextField(
+            controller: linkController,
+            decoration: const InputDecoration(labelText: 'Link'),
+          ),
+        ],
       ),
       actions: [
         TextButton(
@@ -65,7 +63,7 @@ class ProjectListUpdate extends StatelessWidget {
               id: project.id,
               title: titleController.text,
               description: descriptionController.text,
-              yearMade: yearMadeController.text, // Menggunakan String
+              yearMade: yearMadeController.text,
               builtWith: builtWithController.text,
               madeAt: madeAtController.text,
               link: linkController.text,
