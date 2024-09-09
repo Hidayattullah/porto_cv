@@ -9,7 +9,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     container:
-      image: cirrusci/flutter:3.24.0 # Atau versi yang Anda gunakan
+      image: cirrusci/flutter:stable # Atau versi yang Anda gunakan
 
     steps:
       - uses: actions/checkout@v4
