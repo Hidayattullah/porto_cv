@@ -12,6 +12,7 @@ class ProjectTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Projects Table'),
@@ -53,63 +54,70 @@ class ProjectTable extends StatelessWidget {
                       return const SizedBox.shrink();
                     },
                   ),
+                  // Membungkus DataTable dengan SingleChildScrollView untuk horizontal scrolling
                   Expanded(
-                    child: BlocBuilder<AuthCubit, AuthState>(
-                      builder: (context, authState) {
-                        bool isAuthenticated = authState is AuthAuthenticated;
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: BlocBuilder<AuthCubit, AuthState>(
+                          builder: (context, authState) {
+                            bool isAuthenticated = authState is AuthAuthenticated;
 
-                        return DataTable(
-                          columns: [
-                            const DataColumn(label: Text('Title')),
-                            const DataColumn(label: Text('Description')),
-                            const DataColumn(label: Text('Year')),
-                            const DataColumn(label: Text('Built With')),
-                            const DataColumn(label: Text('Made At')),
-                            const DataColumn(label: Text('Link')),
-                            // Menampilkan kolom 'Actions' hanya jika user login
-                            if (isAuthenticated)
-                              const DataColumn(label: Text('Actions')),
-                          ],
-                          rows: projects.map((project) {
-                            return DataRow(
-                              cells: [
-                                DataCell(Text(project.title)),
-                                DataCell(Text(project.description)),
-                                DataCell(Text(project.yearMade)),
-                                DataCell(Text(project.builtWith)),
-                                DataCell(Text(project.madeAt)),
-                                DataCell(Text(project.link)),
+                            return DataTable(
+                              columns: [
+                                const DataColumn(label: Text('Title')),
+                                const DataColumn(label: Text('Description')),
+                                const DataColumn(label: Text('Year')),
+                                const DataColumn(label: Text('Built With')),
+                                const DataColumn(label: Text('Made At')),
+                                const DataColumn(label: Text('Link')),
+                                // Menampilkan kolom 'Actions' hanya jika user login
                                 if (isAuthenticated)
-                                  DataCell(
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.edit),
-                                          onPressed: () {
-                                            // Navigasi ke halaman pengeditan
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => ProjectListUpdate(project: project),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.delete),
-                                          onPressed: () {
-                                            // Hapus project
-                                            context.read<ProjectCubit>().removeProject(project.id);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  const DataColumn(label: Text('Actions')),
                               ],
+                              rows: projects.map((project) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text(project.title)),
+                                    DataCell(Text(project.description)),
+                                    DataCell(Text(project.yearMade)),
+                                    DataCell(Text(project.builtWith)),
+                                    DataCell(Text(project.madeAt)),
+                                    DataCell(Text(project.link)),
+                                    if (isAuthenticated)
+                                      DataCell(
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(Icons.edit),
+                                              onPressed: () {
+                                                // Navigasi ke halaman pengeditan
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => ProjectListUpdate(project: project),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete),
+                                              onPressed: () {
+                                                // Hapus project
+                                                context.read<ProjectCubit>().removeProject(project.id);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      },
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ],
