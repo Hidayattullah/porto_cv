@@ -23,22 +23,7 @@ class ExperienceListBody extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: experiences.map((experience) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Warna latar belakang item
-                      borderRadius: BorderRadius.circular(5.0), // Border radius
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2), // Warna bayangan
-                          spreadRadius: 2,
-                          blurRadius: 6,
-                          offset: const Offset(2, 4), // Posisi bayangan
-                        ),
-                      ],
-                    ),
-                    child: ExperienceListItem(experience: experience),
-                  );
+                  return ExperienceListItem(experience: experience);
                 }).toList(),
               ),
             ),

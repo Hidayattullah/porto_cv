@@ -27,55 +27,38 @@ class _ProjectListItemState extends State<ProjectListItem> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _isHovering = true;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _isHovering = false;
-        });
-      },
+      onEnter: (_) => setState(() {
+        _isHovering = true;
+      }),
+      onExit: (_) => setState(() {
+        _isHovering = false;
+      }),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 200),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5.0),
+          color: _isHovering ? Colors.white : Colors.grey[100], // Background color on hover
+          borderRadius: BorderRadius.circular(5),
           boxShadow: _isHovering
               ? [
                   BoxShadow(
-                    color: Colors.blueAccent.withOpacity(0.6),
-                    spreadRadius: 2,
-                    blurRadius: 8,
-                    offset: const Offset(2, 4),
+                    color: Colors.blueAccent.withOpacity(0.6), // Shadow when hovering
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ]
-              : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 6,
-                    offset: const Offset(2, 4),
-                  ),
-                ],
+              : [], // No shadow when not hovering
         ),
         child: ListTile(
-          title: InkWell(
-            onTap: () {
-              _launchURL(widget.project.link); // Opens link from the database
-            },
-            child: Text(
-              widget.project.title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: _isHovering ? Colors.blue.shade700 : Colors.blueAccent,
-                decoration: _isHovering
-                    ? TextDecoration.underline
-                    : TextDecoration.none,
-              ),
+          onTap: () {
+            _launchURL(widget.project.link); // Opens the project link
+          },
+          title: Text(
+            widget.project.title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueAccent,
             ),
           ),
           subtitle: Text(
