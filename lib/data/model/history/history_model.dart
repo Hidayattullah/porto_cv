@@ -1,4 +1,3 @@
-// data/models/history_model.dart
 import '../../../domain/entities/history_entitiy.dart';
 
 class HistoryModel extends HistoryEntity {
@@ -9,30 +8,29 @@ class HistoryModel extends HistoryEntity {
     required super.applyDate,
     required super.source,
     required super.status,
-    super.notes,
+    required super.link,
   });
 
-  factory HistoryModel.fromJson(Map<String, dynamic> json) {
+  factory HistoryModel.fromMap(Map<String, dynamic> map, String documentId) {
     return HistoryModel(
-      id: json['id'],
-      companyName: json['companyName'],
-      jobTitle: json['jobTitle'],
-      applyDate: DateTime.parse(json['applyDate']),
-      source: json['source'],
-      status: json['status'],
-      notes: json['notes'],
+      id: documentId,
+      companyName: map['companyName'],
+      jobTitle: map['jobTitle'],
+      applyDate: DateTime.parse(map['applyDate']),
+      source: map['source'],
+      status: map['status'],
+      link: map['link'],
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'companyName': companyName,
       'jobTitle': jobTitle,
       'applyDate': applyDate.toIso8601String(),
       'source': source,
       'status': status,
-      'notes': notes,
+      'link': link,
     };
   }
 }

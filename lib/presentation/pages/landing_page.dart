@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../cubits/navigation/navigation_cubit.dart';
+import '../cubits/auth/auth_cubit.dart';
+import '../cubits/auth/auth_state.dart';
 import '../widgets/navigation/desktop_sec.dart';
 import '../widgets/navigation/mobile_sec.dart';
 import 'contact/contact_sec.dart';
 import 'content/home_sec.dart';
+import 'history/history_sec.dart';
 import 'project/project_sec.dart';
 import 'experience/experience_sec.dart';
 
@@ -61,6 +64,12 @@ class _LandingPageState extends State<LandingPage> {
                 BlocProvider.of<NavigationCubit>(context).navigateToshowContactSec();
               }
               break;
+            case 4:
+              if (_currentNavigationState != NavigationState.historysec) {
+                _currentNavigationState = NavigationState.historysec;
+                BlocProvider.of<NavigationCubit>(context).navigateToshowHistorySec();
+              }
+              break;
           }
         }
       });
@@ -96,20 +105,27 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _buildScrollableContent() {
-    return ScrollablePositionedList.builder(
-      itemCount: 4,
-      itemBuilder: (context, index) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: _getSectionWidget(index),
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, authState) {
+        // Determine the number of sections based on authentication state
+        final itemCount = authState is AuthAuthenticated ? 5 : 4;
+
+        return ScrollablePositionedList.builder(
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: _getSectionWidget(index, authState),
+            );
+          },
+          itemScrollController: itemScrollController,
+          itemPositionsListener: itemPositionsListener,
         );
       },
-      itemScrollController: itemScrollController,
-      itemPositionsListener: itemPositionsListener,
     );
   }
 
-  Widget _getSectionWidget(int index) {
+  Widget _getSectionWidget(int index, AuthState authState) {
     switch (index) {
       case 0:
         return const HomeSec();
@@ -119,6 +135,13 @@ class _LandingPageState extends State<LandingPage> {
         return const ProjectSec();
       case 3:
         return const ContactSec();
+      case 4:
+        // Show HistorySec only if the user is authenticated
+        if (authState is AuthAuthenticated) {
+          return const HistorySec();
+        } else {
+          return const SizedBox.shrink(); // Empty widget if not authenticated
+        }
       default:
         return const HomeSec();
     }
@@ -136,6 +159,8 @@ extension NavigationStateExtension on NavigationState {
         return 2;
       case NavigationState.contactsec:
         return 3;
+      case NavigationState.historysec:
+        return 4;
       default:
         return 0;
     }

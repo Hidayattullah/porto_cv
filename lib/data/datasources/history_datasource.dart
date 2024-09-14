@@ -16,18 +16,20 @@ class HistoryDataSourceImpl implements HistoryDataSource {
 
   @override
   Future<void> addHistory(HistoryModel history) async {
-    await firestore.collection('history_apply').doc(history.id).set(history.toJson());
+    await firestore.collection('history_apply').doc(history.id).set(history.toMap());
   }
 
   @override
   Future<List<HistoryModel>> getHistories() async {
     final querySnapshot = await firestore.collection('history_apply').get();
-    return querySnapshot.docs.map((doc) => HistoryModel.fromJson(doc.data())).toList();
+    return querySnapshot.docs
+        .map((doc) => HistoryModel.fromMap(doc.data(), doc.id))
+        .toList();
   }
 
   @override
   Future<void> updateHistory(HistoryModel history) async {
-    await firestore.collection('history_apply').doc(history.id).update(history.toJson());
+    await firestore.collection('history_apply').doc(history.id).update(history.toMap());
   }
 
   @override

@@ -31,9 +31,6 @@ void main() async {
     print('Firebase berhasil diinisialisasi.');
   }
 
-  // Inisialisasi GetIt untuk history dependencies
-  initHistoryDependencies();
-
   runApp(const MyApp());
 }
 
@@ -48,6 +45,7 @@ class MyApp extends StatelessWidget {
         ...provideProjectDependencies(), // Menggunakan Project Dependencies
         ...provideExperienceDependencies(), // Menggunakan Experience Dependencies
         ...provideContactDependencies(),
+        ...provideHistoryDependencies(),
         BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(), // Inisialisasi NavigationCubit
         ),

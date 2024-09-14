@@ -14,7 +14,7 @@ class DesktopSec extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          // Menampilkan notifikasi ketika berhasil login
+          // Show notification when login is successful
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Row(
@@ -29,7 +29,7 @@ class DesktopSec extends StatelessWidget {
             ),
           );
         } else if (state is AuthUnauthenticated) {
-          // Menampilkan notifikasi ketika berhasil logout
+          // Show notification when logout is successful
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Row(
@@ -50,24 +50,24 @@ class DesktopSec extends StatelessWidget {
           return BlocBuilder<AuthCubit, AuthState>(
             builder: (context, authState) {
               return Container(
-                width: 500, // Ukuran untuk navigasi di desktop
-                color: Colors.grey[200], // Warna latar belakang untuk navigasi
+                width: 500, // Size for navigation on desktop
+                color: Colors.grey[200], // Background color for navigation
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Mengatur main axis untuk menempatkan footer di bawah
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Main axis for placing the footer at the bottom
                   children: [
-                    const NavigationHeader(), // Menggunakan widget NavigationHeader
+                    const NavigationHeader(), // Using NavigationHeader widget
                     
-                    // Menampilkan email jika pengguna telah login
-                    if (authState is AuthAuthenticated) 
+                    // Display email if the user is logged in
+                    if (authState is AuthAuthenticated)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Logged in as: ${authState.email}', // Menampilkan email pengguna
+                          'Logged in as: ${authState.email}', // Display user email
                           style: const TextStyle(fontSize: 16, color: Colors.black54),
                         ),
                       ),
                     
-                    // Membungkus list tile dengan SingleChildScrollView
+                    // Wrap list tile with SingleChildScrollView
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
@@ -77,8 +77,12 @@ class DesktopSec extends StatelessWidget {
                             _buildNavItem(context, 'Experience', NavigationState.experiencesec, navState == NavigationState.experiencesec),
                             _buildNavItem(context, 'Projects', NavigationState.projectsec, navState == NavigationState.projectsec),
                             _buildNavItem(context, 'Contact', NavigationState.contactsec, navState == NavigationState.contactsec),
+
+                            // Show history section only if user is authenticated
+                            if (authState is AuthAuthenticated)
+                              _buildNavItem(context, 'History', NavigationState.historysec, navState == NavigationState.historysec),
                             
-                            // Menampilkan tombol Login atau Logout
+                            // Display Login or Logout button
                             ListTile(
                               title: Text(
                                 authState is AuthAuthenticated ? 'Logout' : 'Login',
@@ -86,10 +90,10 @@ class DesktopSec extends StatelessWidget {
                               ),
                               onTap: () {
                                 if (authState is AuthAuthenticated) {
-                                  // Jika pengguna sudah login, panggil fungsi logout
+                                  // If the user is logged in, call logout function
                                   context.read<AuthCubit>().signOut();
                                 } else {
-                                  // Jika belum login, navigasi ke halaman login
+                                  // If not logged in, navigate to login page
                                   Navigator.pushNamed(context, '/login');
                                 }
                               },
@@ -99,7 +103,7 @@ class DesktopSec extends StatelessWidget {
                       ),
                     ),
                     
-                    const NavigationFooter(), // Menggunakan widget NavigationFooter
+                    const NavigationFooter(), // Using NavigationFooter widget
                   ],
                 ),
               );
@@ -117,9 +121,9 @@ class DesktopSec extends StatelessWidget {
         style: TextStyle(color: isSelected ? Colors.blue : Colors.black),
       ),
       selected: isSelected,
-      selectedTileColor: Colors.blue[100], // Warna latar belakang ketika dipilih
+      selectedTileColor: Colors.blue[100], // Background color when selected
       onTap: () {
-        // Menggunakan metode navigasi dari NavigationCubit berdasarkan sectionState
+        // Use NavigationCubit's navigation method based on sectionState
         final navigationCubit = BlocProvider.of<NavigationCubit>(context);
         switch (sectionState) {
           case NavigationState.homesec:
@@ -133,6 +137,9 @@ class DesktopSec extends StatelessWidget {
             break;
           case NavigationState.contactsec:
             navigationCubit.navigateToshowContactSec();
+            break;
+          case NavigationState.historysec:
+            navigationCubit.navigateToshowHistorySec();
             break;
         }
       },

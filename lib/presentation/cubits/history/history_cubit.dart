@@ -1,5 +1,3 @@
-// presentation/cubits/history/history_cubit.dart
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/history_entitiy.dart';
 import '../../../domain/usescases/history/add_history.dart';
@@ -35,8 +33,7 @@ class HistoryCubit extends Cubit<HistoryState> {
     try {
       emit(HistoryLoading());
       await addHistory.execute(history);
-      emit(HistoryAdded());
-      await fetchHistories(); // Refresh the list
+      emit(HistoryLoaded(await getHistory.execute())); // Refresh the list
     } catch (e) {
       emit(HistoryError(e.toString()));
     }
@@ -46,8 +43,7 @@ class HistoryCubit extends Cubit<HistoryState> {
     try {
       emit(HistoryLoading());
       await updateHistory.execute(history);
-      emit(HistoryUpdated());
-      await fetchHistories(); // Refresh the list
+      emit(HistoryLoaded(await getHistory.execute())); // Refresh the list
     } catch (e) {
       emit(HistoryError(e.toString()));
     }
@@ -57,8 +53,7 @@ class HistoryCubit extends Cubit<HistoryState> {
     try {
       emit(HistoryLoading());
       await deleteHistory.execute(id);
-      emit(HistoryDeleted());
-      await fetchHistories(); // Refresh the list
+      emit(HistoryLoaded(await getHistory.execute())); // Refresh the list
     } catch (e) {
       emit(HistoryError(e.toString()));
     }

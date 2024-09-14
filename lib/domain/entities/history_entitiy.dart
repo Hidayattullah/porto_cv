@@ -1,5 +1,3 @@
-// domain/entities/history_entity.dart
-
 class HistoryEntity {
   final String id;
   final String companyName;
@@ -7,7 +5,7 @@ class HistoryEntity {
   final DateTime applyDate;
   final String source;
   final String status;
-  final String? notes;
+  final String link;
 
   const HistoryEntity({
     required this.id,
@@ -16,6 +14,6 @@ class HistoryEntity {
     required this.applyDate,
     required this.source,
     required this.status,
-    this.notes,
+    required this.link,
   });
 }
