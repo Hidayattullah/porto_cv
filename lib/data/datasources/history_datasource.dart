@@ -1,39 +1,72 @@
-// data/datasources/history_datasource.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../model/history/history_model.dart';
 
-abstract class HistoryDataSource {
-  Future<void> addHistory(HistoryModel history);
-  Future<List<HistoryModel>> getHistories();
-  Future<void> updateHistory(HistoryModel history);
-  Future<void> deleteHistory(String id);
-}
+class HistoryDataSource {
+  final FirebaseFirestore _firestore;
 
-class HistoryDataSourceImpl implements HistoryDataSource {
-  final FirebaseFirestore firestore;
+  HistoryDataSource(this._firestore);
 
-  HistoryDataSourceImpl(this.firestore);
-
-  @override
   Future<void> addHistory(HistoryModel history) async {
-    await firestore.collection('history_apply').doc(history.id).set(history.toMap());
+    try {
+      await _firestore.collection('history_apply').add(history.toMap());
+      if (kDebugMode) {
+        print("History added successfully.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error adding history: $e");
+      }
+      throw Exception("Failed to add history");
+    }
   }
 
-  @override
-  Future<List<HistoryModel>> getHistories() async {
-    final querySnapshot = await firestore.collection('history_apply').get();
-    return querySnapshot.docs
-        .map((doc) => HistoryModel.fromMap(doc.data(), doc.id))
-        .toList();
+  Future<List<HistoryModel>> getHistory() async {
+    try {
+      if (kDebugMode) {
+        print("Fetching histories from Firestore...");
+      }
+      final querySnapshot = await _firestore.collection('history_apply').get();
+      final histories = querySnapshot.docs
+          .map((doc) => HistoryModel.fromMap(doc.data(), doc.id))
+          .toList();
+      if (kDebugMode) {
+        print("Histories fetched successfully. Total: ${histories.length}");
+      }
+      return histories;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching histories from Firestore: $e');
+      }
+      throw Exception("Failed to fetch histories");
+    }
   }
 
-  @override
   Future<void> updateHistory(HistoryModel history) async {
-    await firestore.collection('history_apply').doc(history.id).update(history.toMap());
+    try {
+      await _firestore.collection('history_apply').doc(history.id).update(history.toMap());
+      if (kDebugMode) {
+        print("History updated successfully.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error updating history: $e");
+      }
+      throw Exception("Failed to update history");
+    }
   }
 
-  @override
   Future<void> deleteHistory(String id) async {
-    await firestore.collection('history_apply').doc(id).delete();
+    try {
+      await _firestore.collection('history_apply').doc(id).delete();
+      if (kDebugMode) {
+        print("History deleted successfully.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error deleting history: $e");
+      }
+      throw Exception("Failed to delete history");
+    }
   }
 }

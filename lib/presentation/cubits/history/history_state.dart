@@ -24,6 +24,15 @@ class HistoryLoaded extends HistoryState {
   List<Object?> get props => [histories];
 }
 
+// State when a new history is successfully added
+class HistoryCreated extends HistoryState {}
+
+// State when an existing history is successfully updated
+class HistoryUpdated extends HistoryState {}
+
+// State when an existing history is successfully deleted
+class HistoryDeleted extends HistoryState {}
+
 // Error state with a message
 class HistoryError extends HistoryState {
   final String message;

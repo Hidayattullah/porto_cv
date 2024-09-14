@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../cubits/history/history_cubit.dart';
-import 'history_form.dart';
 import 'history_body.dart';
+import 'history_form.dart'; // Menggunakan HistoryBody
 
-class HistorySec extends StatelessWidget {
+class HistorySec extends StatefulWidget {
   const HistorySec({super.key});
+
+  @override
+  _HistorySecState createState() => _HistorySecState();
+}
+
+class _HistorySecState extends State<HistorySec> {
+  @override
+  void initState() {
+    super.initState();
+    
+    // Memanggil Cubit untuk mengambil daftar history
+    context.read<HistoryCubit>().fetchHistories();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +33,7 @@ class HistorySec extends StatelessWidget {
                 context: context,
                 builder: (context) => HistoryForm(
                   onAddHistory: (newHistory) {
-                    context.read<HistoryCubit>().addHistory;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('History added successfully.'),
-                        duration: Duration(seconds: 2),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
+                    context.read<HistoryCubit>().addNewHistory(newHistory);
                   },
                 ),
               );
@@ -35,7 +41,7 @@ class HistorySec extends StatelessWidget {
           ),
         ],
       ),
-      body: const HistoryBody(),
+      body: const HistoryBody(), // Menggunakan HistoryBody di sini
     );
   }
 }

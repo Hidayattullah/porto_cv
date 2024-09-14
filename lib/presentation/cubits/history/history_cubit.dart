@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/history_entitiy.dart';
 import '../../../domain/usescases/history/add_history.dart';
@@ -20,41 +21,80 @@ class HistoryCubit extends Cubit<HistoryState> {
   }) : super(HistoryInitial());
 
   Future<void> fetchHistories() async {
+    if (kDebugMode) {
+      print('Fetching histories...');
+    }
+    emit(HistoryLoading());
     try {
-      emit(HistoryLoading());
       final histories = await getHistory.execute();
+      if (kDebugMode) {
+        print('Histories fetched successfully. Total: ${histories.length}');
+      }
       emit(HistoryLoaded(histories));
     } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching histories: $e');
+      }
       emit(HistoryError(e.toString()));
     }
   }
 
   Future<void> addNewHistory(HistoryEntity history) async {
+    if (kDebugMode) {
+      print('Adding new history: ${history.companyName}');
+    }
+    emit(HistoryLoading());
     try {
-      emit(HistoryLoading());
       await addHistory.execute(history);
-      emit(HistoryLoaded(await getHistory.execute())); // Refresh the list
+      if (kDebugMode) {
+        print('History added successfully: ${history.companyName}');
+      }
+      emit(HistoryCreated());
+      fetchHistories();  // Fetch ulang untuk memperbarui list
     } catch (e) {
+      if (kDebugMode) {
+        print('Error adding history: $e');
+      }
       emit(HistoryError(e.toString()));
     }
   }
 
   Future<void> updateExistingHistory(HistoryEntity history) async {
+    if (kDebugMode) {
+      print('Updating history: ${history.companyName}');
+    }
+    emit(HistoryLoading());
     try {
-      emit(HistoryLoading());
       await updateHistory.execute(history);
-      emit(HistoryLoaded(await getHistory.execute())); // Refresh the list
+      if (kDebugMode) {
+        print('History updated successfully: ${history.companyName}');
+      }
+      emit(HistoryUpdated());
+      fetchHistories();  // Fetch ulang untuk memperbarui list
     } catch (e) {
+      if (kDebugMode) {
+        print('Error updating history: $e');
+      }
       emit(HistoryError(e.toString()));
     }
   }
 
   Future<void> deleteHistoryById(String id) async {
+    if (kDebugMode) {
+      print('Deleting history with ID: $id');
+    }
+    emit(HistoryLoading());
     try {
-      emit(HistoryLoading());
       await deleteHistory.execute(id);
-      emit(HistoryLoaded(await getHistory.execute())); // Refresh the list
+      if (kDebugMode) {
+        print('History deleted successfully: $id');
+      }
+      emit(HistoryDeleted());
+      fetchHistories();  // Fetch ulang untuk memperbarui list
     } catch (e) {
+      if (kDebugMode) {
+        print('Error deleting history: $e');
+      }
       emit(HistoryError(e.toString()));
     }
   }

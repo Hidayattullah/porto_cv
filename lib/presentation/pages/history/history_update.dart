@@ -12,7 +12,6 @@ class HistoryUpdate extends StatelessWidget {
   Widget build(BuildContext context) {
     final companyNameController = TextEditingController(text: history.companyName);
     final jobTitleController = TextEditingController(text: history.jobTitle);
-    final applyDateController = TextEditingController(text: history.applyDate.toIso8601String());
     final sourceController = TextEditingController(text: history.source);
     final statusController = TextEditingController(text: history.status);
     final linkController = TextEditingController(text: history.link);
@@ -30,10 +29,6 @@ class HistoryUpdate extends StatelessWidget {
             TextField(
               controller: jobTitleController,
               decoration: const InputDecoration(labelText: 'Job Title'),
-            ),
-            TextField(
-              controller: applyDateController,
-              decoration: const InputDecoration(labelText: 'Apply Date (YYYY-MM-DD)'),
             ),
             TextField(
               controller: sourceController,
@@ -59,21 +54,11 @@ class HistoryUpdate extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            DateTime? applyDate;
-            try {
-              applyDate = DateTime.parse(applyDateController.text);
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Invalid date format. Please use YYYY-MM-DD.')),
-              );
-              return;
-            }
-
             final updatedHistory = HistoryEntity(
               id: history.id,
               companyName: companyNameController.text,
               jobTitle: jobTitleController.text,
-              applyDate: applyDate,
+              applyDate: history.applyDate, // Keep the original applyDate
               source: sourceController.text,
               status: statusController.text,
               link: linkController.text,

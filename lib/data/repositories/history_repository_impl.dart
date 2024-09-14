@@ -12,6 +12,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
   @override
   Future<void> addHistory(HistoryEntity history) async {
     try {
+      // Konversi entity menjadi model
       final historyModel = HistoryModel(
         id: history.id,
         companyName: history.companyName,
@@ -21,6 +22,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
         status: history.status,
         link: history.link,
       );
+      // Panggil dataSource untuk menambah history
       await dataSource.addHistory(historyModel);
       if (kDebugMode) {
         print('History added successfully: ${history.companyName}');
@@ -29,28 +31,42 @@ class HistoryRepositoryImpl implements HistoryRepository {
       if (kDebugMode) {
         print('Error adding history: $e');
       }
+      throw Exception("Failed to add history");
     }
   }
 
   @override
-  Future<List<HistoryEntity>> getHistories() async {
+  Future<List<HistoryEntity>> getHistory() async {
     try {
-      final historyModels = await dataSource.getHistories();
+      // Ambil list dari dataSource
+      final historyModels = await dataSource.getHistory();
       if (kDebugMode) {
         print('Histories retrieved successfully.');
       }
-      return historyModels;
+      // Konversi model menjadi entity
+      return historyModels.map((historyModel) {
+        return HistoryEntity(
+          id: historyModel.id,
+          companyName: historyModel.companyName,
+          jobTitle: historyModel.jobTitle,
+          applyDate: historyModel.applyDate,
+          source: historyModel.source,
+          status: historyModel.status,
+          link: historyModel.link,
+        );
+      }).toList();
     } catch (e) {
       if (kDebugMode) {
         print('Error retrieving histories: $e');
       }
-      rethrow; // rethrow if necessary to propagate the error
+      rethrow;
     }
   }
 
   @override
   Future<void> updateHistory(HistoryEntity history) async {
     try {
+      // Konversi entity menjadi model
       final historyModel = HistoryModel(
         id: history.id,
         companyName: history.companyName,
@@ -60,6 +76,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
         status: history.status,
         link: history.link,
       );
+      // Panggil dataSource untuk update history
       await dataSource.updateHistory(historyModel);
       if (kDebugMode) {
         print('History updated successfully: ${history.companyName}');
@@ -68,12 +85,14 @@ class HistoryRepositoryImpl implements HistoryRepository {
       if (kDebugMode) {
         print('Error updating history: $e');
       }
+      throw Exception("Failed to update history");
     }
   }
 
   @override
   Future<void> deleteHistory(String id) async {
     try {
+      // Panggil dataSource untuk menghapus history
       await dataSource.deleteHistory(id);
       if (kDebugMode) {
         print('History deleted successfully: $id');
@@ -82,6 +101,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
       if (kDebugMode) {
         print('Error deleting history: $e');
       }
+      throw Exception("Failed to delete history");
     }
   }
 }

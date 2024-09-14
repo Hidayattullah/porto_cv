@@ -8,6 +8,6 @@ class GetHistory {
   GetHistory(this.repository);
 
   Future<List<HistoryEntity>> execute() async {
-    return await repository.getHistories();
+    return await repository.getHistory();
   }
 }

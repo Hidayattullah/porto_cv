@@ -13,7 +13,7 @@ class HistoryForm extends StatelessWidget {
     final jobTitleController = TextEditingController();
     final sourceController = TextEditingController();
     final statusController = TextEditingController();
-    final linkController = TextEditingController(); // Tambahkan TextEditingController untuk link
+    final linkController = TextEditingController();
     const uuid = Uuid(); // Initialize UUID generator
 
     return AlertDialog(
@@ -30,7 +30,6 @@ class HistoryForm extends StatelessWidget {
               controller: jobTitleController,
               decoration: const InputDecoration(labelText: 'Job Title'),
             ),
-            // Apply Date otomatis tidak perlu diinput manual
             TextField(
               controller: sourceController,
               decoration: const InputDecoration(labelText: 'Source'),
@@ -40,7 +39,7 @@ class HistoryForm extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Status'),
             ),
             TextField(
-              controller: linkController, // TextField untuk link
+              controller: linkController,
               decoration: const InputDecoration(labelText: 'Link (Company Website)'),
             ),
           ],
@@ -56,18 +55,30 @@ class HistoryForm extends StatelessWidget {
         ElevatedButton(
           child: const Text('Add'),
           onPressed: () {
-            final newHistory = HistoryEntity(
-              id: uuid.v4(), // Generate a new unique ID using UUID
-              companyName: companyNameController.text,
-              jobTitle: jobTitleController.text,
-              applyDate: DateTime.now(), // Set otomatis apply date ke waktu sekarang
-              source: sourceController.text,
-              status: statusController.text,
-              link: linkController.text, // Set nilai link dari TextField
-            );
+            final companyName = companyNameController.text;
+            final jobTitle = jobTitleController.text;
+            final source = sourceController.text;
+            final status = statusController.text;
+            final link = linkController.text;
 
-            onAddHistory(newHistory);
-            Navigator.of(context).pop();
+            if (companyName.isNotEmpty && jobTitle.isNotEmpty && source.isNotEmpty && status.isNotEmpty && link.isNotEmpty) {
+              final newHistory = HistoryEntity(
+                id: uuid.v4(), // Generate a new unique ID
+                companyName: companyName,
+                jobTitle: jobTitle,
+                applyDate: DateTime.now(), // Set apply date to now
+                source: source,
+                status: status,
+                link: link,
+              );
+
+              onAddHistory(newHistory);
+              Navigator.of(context).pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('All fields are required!')),
+              );
+            }
           },
         ),
       ],
