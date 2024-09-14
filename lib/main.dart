@@ -14,6 +14,7 @@ import 'dependencies/auth_dependency.dart';
 import 'dependencies/contact_dependency.dart';
 import 'dependencies/experience_dependency.dart';
 import 'presentation/pages/project/project_tabel.dart'; // Import Experience Dependencies
+import 'dependencies/history_dependency.dart'; // Import History Dependency (using GetIt)
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,9 @@ void main() async {
   if (kDebugMode) {
     print('Firebase berhasil diinisialisasi.');
   }
+
+  // Inisialisasi GetIt untuk history dependencies
+  initHistoryDependencies();
 
   runApp(const MyApp());
 }
